@@ -1,0 +1,58 @@
+
+-- 2025-12-18_insert_eso_t_c0011_keiki.sql
+-- 目的：計器類テーブルに挿入
+-- 作成日: 2025-12-18
+-- 作成者: 浦大輔
+-- 対象DB：PostgreSQL
+--
+-- 使用方法：
+-- 1. アプリケーションから実行（推奨）：パラメータ化クエリとして使用
+-- 2. 直接実行する場合：以下のPREPARE文を使用
+--
+-- PREPARE insert_keiki AS
+-- INSERT INTO eso_t_c0011_keiki (
+--     okyaku_id, zumen_id, setsubi_id, kotai_id, daisu_renban,
+--     shinsetsu_flg, shurui_cd, tkaku_v, tkaku_v_cd, tkaku_a, tkaku_a_cd,
+--     seizo_ym, biko, ordr_jn, create_user, record_user, shinki_koushin_sakujo_flg
+-- ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 0);
+--
+-- EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001');
+
+INSERT INTO eso_t_c0011_keiki (
+    okyaku_id,
+    zumen_id,
+    setsubi_id,
+    kotai_id,
+    daisu_renban,
+    shinsetsu_flg,
+    shurui_cd,
+    tkaku_v,
+    tkaku_v_cd,
+    tkaku_a,
+    tkaku_a_cd,
+    seizo_ym,
+    biko,
+    ordr_jn,
+    create_user,
+    record_user,
+    shinki_koushin_sakujo_flg
+)
+VALUES (
+    $1,  -- okyaku_id
+    $2,  -- zumen_id
+    $3,  -- setsubi_id
+    $4,  -- kotai_id
+    $5,  -- daisu_renban
+    $6,  -- shinsetsu_flg
+    $7,  -- shurui_cd
+    $8,  -- tkaku_v
+    $9,  -- tkaku_v_cd
+    $10, -- tkaku_a
+    $11, -- tkaku_a_cd
+    $12, -- seizo_ym
+    $13, -- biko
+    $14, -- ordr_jn
+    $15, -- create_user
+    $16, -- record_user
+    0    -- 0：新規
+);
