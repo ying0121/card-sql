@@ -13,6 +13,7 @@
 - カラム変更（`003_alter_columns_*.sql`）
 - インデックス作成（`004_create_indexes_*.sql`）
 - カラム削除（`005_drop_column_*.sql`）
+- カラムコメント追加（`006_add_comments_*.sql`）
 
 **命名規則：**
 - `YYYY-MM-DD_NNN_description_table_name.sql`
@@ -143,7 +144,7 @@ YYYY-MM-DD_NNN_operation_table_name.sql
 ```
 - `YYYY-MM-DD`: 作成日
 - `NNN`: 連番（001, 002, 003...）
-- `operation`: 操作内容（create, add_columns, alter_columns, create_indexes, drop_column）
+- `operation`: 操作内容（create, add_columns, alter_columns, create_indexes, drop_column, add_comments）
 - `table_name`: テーブル名
 
 ### クエリファイル
