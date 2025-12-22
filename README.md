@@ -1,44 +1,10 @@
-# SQL ファイル管理 / SQL File Management
+# SQL ファイル管理
 
 <div align="right">
-  <button onclick="showLanguage('ja')" id="btn-ja" style="background-color: #4CAF50; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 4px; font-weight: bold;">日本語</button>
-  <button onclick="showLanguage('en')" id="btn-en" style="background-color: #f0f0f0; color: #333; border: 1px solid #ccc; padding: 8px 16px; cursor: pointer; border-radius: 4px;">English</button>
+<details>
+<summary><b>English</b></summary>
+</details>
 </div>
-
-<script>
-  // Set default language to Japanese
-  document.addEventListener('DOMContentLoaded', function() {
-    showLanguage('ja');
-  });
-
-  function showLanguage(lang) {
-    // Hide all language sections
-    const jaSections = document.querySelectorAll('.lang-ja');
-    const enSections = document.querySelectorAll('.lang-en');
-    
-    if (lang === 'ja') {
-      jaSections.forEach(el => el.style.display = 'block');
-      enSections.forEach(el => el.style.display = 'none');
-      document.getElementById('btn-ja').style.backgroundColor = '#4CAF50';
-      document.getElementById('btn-ja').style.color = 'white';
-      document.getElementById('btn-ja').style.fontWeight = 'bold';
-      document.getElementById('btn-en').style.backgroundColor = '#f0f0f0';
-      document.getElementById('btn-en').style.color = '#333';
-      document.getElementById('btn-en').style.fontWeight = 'normal';
-    } else {
-      jaSections.forEach(el => el.style.display = 'none');
-      enSections.forEach(el => el.style.display = 'block');
-      document.getElementById('btn-en').style.backgroundColor = '#4CAF50';
-      document.getElementById('btn-en').style.color = 'white';
-      document.getElementById('btn-en').style.fontWeight = 'bold';
-      document.getElementById('btn-ja').style.backgroundColor = '#f0f0f0';
-      document.getElementById('btn-ja').style.color = '#333';
-      document.getElementById('btn-ja').style.fontWeight = 'normal';
-    }
-  }
-</script>
-
-<div class="lang-ja">
 
 このディレクトリには、PostgreSQL用のSQLファイルが3つのフォルダに整理されています。
 
@@ -233,9 +199,12 @@ YYYY-MM-DD_operation_table_name.sql
   - Flyway: https://flywaydb.org/
   - Liquibase: https://www.liquibase.org/
 
-</div>
+---
 
-<div class="lang-en" style="display: none;">
+<details>
+<summary><b>English Version</b></summary>
+
+# SQL File Management
 
 This directory contains PostgreSQL SQL files organized into 3 folders.
 
@@ -430,4 +399,4 @@ YYYY-MM-DD_operation_table_name.sql
   - Flyway: https://flywaydb.org/
   - Liquibase: https://www.liquibase.org/
 
-</div>
+</details>
