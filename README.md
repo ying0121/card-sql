@@ -1,4 +1,44 @@
-# SQL ファイル管理
+# SQL ファイル管理 / SQL File Management
+
+<div align="right">
+  <button onclick="showLanguage('ja')" id="btn-ja" style="background-color: #4CAF50; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 4px; font-weight: bold;">日本語</button>
+  <button onclick="showLanguage('en')" id="btn-en" style="background-color: #f0f0f0; color: #333; border: 1px solid #ccc; padding: 8px 16px; cursor: pointer; border-radius: 4px;">English</button>
+</div>
+
+<script>
+  // Set default language to Japanese
+  document.addEventListener('DOMContentLoaded', function() {
+    showLanguage('ja');
+  });
+
+  function showLanguage(lang) {
+    // Hide all language sections
+    const jaSections = document.querySelectorAll('.lang-ja');
+    const enSections = document.querySelectorAll('.lang-en');
+    
+    if (lang === 'ja') {
+      jaSections.forEach(el => el.style.display = 'block');
+      enSections.forEach(el => el.style.display = 'none');
+      document.getElementById('btn-ja').style.backgroundColor = '#4CAF50';
+      document.getElementById('btn-ja').style.color = 'white';
+      document.getElementById('btn-ja').style.fontWeight = 'bold';
+      document.getElementById('btn-en').style.backgroundColor = '#f0f0f0';
+      document.getElementById('btn-en').style.color = '#333';
+      document.getElementById('btn-en').style.fontWeight = 'normal';
+    } else {
+      jaSections.forEach(el => el.style.display = 'none');
+      enSections.forEach(el => el.style.display = 'block');
+      document.getElementById('btn-en').style.backgroundColor = '#4CAF50';
+      document.getElementById('btn-en').style.color = 'white';
+      document.getElementById('btn-en').style.fontWeight = 'bold';
+      document.getElementById('btn-ja').style.backgroundColor = '#f0f0f0';
+      document.getElementById('btn-ja').style.color = '#333';
+      document.getElementById('btn-ja').style.fontWeight = 'normal';
+    }
+  }
+</script>
+
+<div class="lang-ja">
 
 このディレクトリには、PostgreSQL用のSQLファイルが3つのフォルダに整理されています。
 
@@ -193,3 +233,201 @@ YYYY-MM-DD_operation_table_name.sql
   - Flyway: https://flywaydb.org/
   - Liquibase: https://www.liquibase.org/
 
+</div>
+
+<div class="lang-en" style="display: none;">
+
+This directory contains PostgreSQL SQL files organized into 3 folders.
+
+## Folder Structure
+
+### 📁 migrations/
+Stores migration files that manage database structure changes (DDL).
+
+**Contents:**
+- Table creation (`001_create_*_table.sql`)
+- Column addition (`002_add_columns_*.sql`)
+- Column modification (`003_alter_columns_*.sql`)
+- Index creation (`004_create_indexes_*.sql`)
+- Column deletion (`005_drop_column_*.sql`)
+
+**Naming Convention:**
+- `YYYY-MM-DD_NNN_description_table_name.sql`
+- Order is managed by date and sequence number for sequential execution
+
+**Execution Method:**
+- Execute sequentially using migration tools (Flyway, Liquibase, etc.)
+- Or execute manually in date order
+
+---
+
+### 📁 queries/
+Stores DML queries (INSERT, SELECT, UPDATE, DELETE) executed from applications.
+
+**Contents:**
+- INSERT queries (`*_insert_*.sql`)
+- SELECT queries (`*_select_*.sql`)
+- UPDATE queries (`*_update_*.sql`)
+- DELETE queries (`*_delete_*.sql`)
+
+**Features:**
+- All queries use parameterization ($1, $2 format)
+- Use RETURNING clause to return results
+- Support logical deletion (`shinki_koushin_sakujo_flg IS DISTINCT FROM 2`)
+- Each query file includes PREPARE statement examples in comments
+
+**Naming Convention:**
+- `YYYY-MM-DD_operation_table_name.sql`
+
+**Usage:**
+
+1. **Execute from Application (Recommended)**
+   - Use as parameterized queries
+   - SQL injection protection included
+
+2. **Direct Execution (psql, etc.)**
+   - Use PREPARE statement examples documented in comments within each query file
+   - Open the file and copy the PREPARE and EXECUTE statements from the comments to execute
+
+**Example from Application:**
+```python
+# Python (psycopg2) example
+cursor.execute(open('queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql').read(), 
+               ('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001'))
+```
+
+**For Direct Execution:**
+Each query file's header contains PREPARE and EXECUTE statement examples in comments.
+Open the file and copy the comment section to execute.
+
+Example:
+```sql
+-- Copy the following from the file's comments to execute
+PREPARE insert_keiki AS
+INSERT INTO eso_t_c0011_keiki (...) VALUES ($1, $2, $3, ...);
+
+EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001');
+```
+
+**Note:**
+- Each query file includes PREPARE statement examples in comments for direct execution
+- For application execution, use as parameterized queries directly
+- For direct execution, refer to the PREPARE statement examples in the file
+
+---
+
+### 📁 scripts/
+Stores SQL scripts for one-time execution or investigation purposes.
+
+**Purposes:**
+- Table operation examples and test queries
+- Data migration scripts
+- Backup/restore scripts
+- Data cleanup scripts
+- Investigation and analysis queries
+- Test data insertion scripts
+- Performance investigation queries
+
+**Naming Convention:**
+- `YYYY-MM-DD_description.sql`
+- Or use descriptive names based on purpose
+
+**Examples:**
+- `YYYY-MM-DD_example_views_usage.sql` - Table query examples (SELECT)
+- `YYYY-MM-DD_example_functions_usage.sql` - Table operation examples (INSERT/UPDATE/DELETE)
+- `YYYY-MM-DD_migrate_old_data.sql` - Data migration
+- `YYYY-MM-DD_backup_before_update.sql` - Backup
+- `YYYY-MM-DD_analyze_performance.sql` - Performance analysis
+- `YYYY-MM-DD_cleanup_test_data.sql` - Test data cleanup
+
+**Table Operation Related Scripts:**
+- Table query examples (SELECT, excluding logical deletions)
+- Table operation examples (INSERT, UPDATE, DELETE)
+- Table definition confirmation queries
+- Table statistics retrieval queries
+
+**Note:**
+- `example_views_usage.sql` and `example_functions_usage.sql` are query examples using actual tables
+- These scripts are for one-time execution or investigation purposes
+- In actual applications, use parameterized queries from the `queries/` folder
+- Scripts specify values directly, but always use parameterized queries in production environments
+
+---
+
+## Table List
+
+Currently managed tables:
+
+1. **eso_t_c0011_keiki** - Instrument Table
+2. **eso_t_c0012_kaiheiki** - Low Voltage Switch Table
+3. **eso_t_c0013_cable** - Low Voltage Cable Management Table
+4. **eso_t_c0014_bundenban** - Distribution Panel Table
+5. **eso_t_c0015_keidenki** - Watt-hour Meter Table
+6. **eso_t_c0016_ct** - Low Voltage Current Transformer Table
+7. **eso_t_c0017_fuse** - Low Voltage Fuse Table
+8. **eso_t_c0018_kansen** - Main Line Table
+9. **eso_t_c0019_sc** - Low Voltage Capacitor Table
+10. **eso_t_c0020_sr** - Low Voltage Reactor Table
+11. **eso_t_c0021_kometer** - Sub-meter Table
+
+---
+
+## File Naming Convention
+
+### Migration Files
+```
+YYYY-MM-DD_NNN_operation_table_name.sql
+```
+- `YYYY-MM-DD`: Creation date
+- `NNN`: Sequence number (001, 002, 003...)
+- `operation`: Operation type (create, add_columns, alter_columns, create_indexes, drop_column)
+- `table_name`: Table name
+
+### Query Files
+```
+YYYY-MM-DD_operation_table_name.sql
+```
+- `YYYY-MM-DD`: Creation date
+- `operation`: Operation (insert, select, update, delete)
+- `table_name`: Table name
+
+---
+
+## Best Practices
+
+1. **Migrations**
+   - Modifying or overwriting existing SQL is prohibited
+   - Always add new SQL files for changes
+   - Use transactions (BEGIN/COMMIT)
+   - Order is managed by date and sequence number for sequential execution
+
+2. **Queries**
+   - All queries are parameterized (SQL injection protection)
+   - Do not use SELECT *
+   - Utilize indexes as needed
+   - Executed directly from applications
+
+3. **Scripts**
+   - Always backup before execution
+   - Record execution history
+   - Execute carefully in production environments
+   - For one-time execution or investigation purposes
+
+---
+
+## File Structure Principles
+
+- **No subfolders** - All files are placed directly in each folder
+- **Organized by naming convention** - Managed by date and operation type in file names
+- **Execute in date order** - Migration files are executed in date order
+
+---
+
+## Related Resources
+
+- PostgreSQL Official Documentation: https://www.postgresql.org/docs/
+- Migration Tools:
+  - Flyway: https://flywaydb.org/
+  - Liquibase: https://www.liquibase.org/
+
+</div>
