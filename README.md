@@ -54,6 +54,21 @@
    - ファイルを開いて、コメント部分のPREPARE文とEXECUTE文をコピーして実行
 
 **アプリケーションからの使用例：**
+```javascript
+// JavaScript (node-postgres) の例
+const fs = require('fs');
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  // データベース接続設定
+});
+
+const query = fs.readFileSync('queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql', 'utf8');
+const values = ['1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001'];
+
+const result = await pool.query(query, values);
+```
+
 ```python
 # Python (psycopg2) の例
 cursor.execute(open('queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql').read(), 
