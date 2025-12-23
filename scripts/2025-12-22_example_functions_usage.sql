@@ -18,6 +18,7 @@
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_insert_eso_t_c0017_fuse_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0017_fuse (
     okyaku_id,
     zumen_id,
@@ -56,9 +57,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_update_eso_t_c0017_fuse_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0017_fuse
 SET
     shinsetsu_flg             = 1,
@@ -82,9 +85,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_delete_eso_t_c0017_fuse_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0017_fuse
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -102,6 +107,7 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- ============================================
 -- 2. 幹線テーブル操作の使用例
@@ -109,6 +115,7 @@ RETURNING
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_insert_eso_t_c0018_kansen_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0018_kansen (
     okyaku_id,
     zumen_id,
@@ -145,9 +152,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_update_eso_t_c0018_kansen_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0018_kansen
 SET
     shinsetsu_flg             = 1,
@@ -173,6 +182,7 @@ RETURNING
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_delete_eso_t_c0018_kansen_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0018_kansen
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -190,6 +200,7 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- ============================================
 -- 3. 低圧コンデンサテーブル操作の使用例
@@ -197,6 +208,7 @@ RETURNING
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_insert_eso_t_c0019_sc_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0019_sc (
     okyaku_id,
     zumen_id,
@@ -247,9 +259,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_update_eso_t_c0019_sc_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0019_sc
 SET
     shinsetsu_flg                 = 1,
@@ -282,6 +296,7 @@ RETURNING
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-22_delete_eso_t_c0019_sc_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0019_sc
 SET
     shinki_koushin_sakujo_flg = 2,

@@ -112,24 +112,39 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 - または、用途に応じた分かりやすい名前
 
 **例：**
-- `YYYY-MM-DD_example_views_usage.sql` - テーブルクエリの使用例（SELECT）
+- `YYYY-MM-DD_example_views_usage.sql` - ビュー作成とテーブル統計情報取得の使用例
 - `YYYY-MM-DD_example_functions_usage.sql` - テーブル操作の使用例（INSERT/UPDATE/DELETE）
+- `common_table_definitions.sql` - テーブル定義確認クエリ（共通）
 - `YYYY-MM-DD_migrate_old_data.sql` - データ移行
 - `YYYY-MM-DD_backup_before_update.sql` - バックアップ
 - `YYYY-MM-DD_analyze_performance.sql` - パフォーマンス分析
 - `YYYY-MM-DD_cleanup_test_data.sql` - テストデータクリーンアップ
 
 **テーブル操作関連のスクリプト：**
-- テーブルクエリの使用例（SELECT、論理削除除外）
-- テーブル操作の使用例（INSERT、UPDATE、DELETE）
-- テーブル定義確認クエリ
-- テーブル統計情報取得クエリ
+
+1. **`example_views_usage.sql`** - ビュー作成と統計情報取得
+   - 各テーブル用のビューを作成（`CREATE OR REPLACE VIEW`）
+   - ビュー名は `v_eso_t_c00XX` 形式（例：`v_eso_t_c0011_keiki`）
+   - ビューは論理削除されていないレコードのみを返す（`shinki_koushin_sakujo_flg IS DISTINCT FROM 2`）
+   - 各日付のファイルには、その日付までに作成されたテーブルの統計情報取得クエリを含む
+   - すべてのクエリは `BEGIN/COMMIT` トランザクションで囲まれている
+
+2. **`example_functions_usage.sql`** - テーブル操作の使用例
+   - INSERT、UPDATE、DELETE操作の使用例
+   - すべてのクエリは `BEGIN/COMMIT` トランザクションで囲まれている
+   - 実際のアプリケーションでは、`queries/` フォルダのパラメータ化クエリを使用すること
+
+3. **`common_table_definitions.sql`** - テーブル定義確認クエリ（共通）
+   - 全テーブルの定義情報を取得
+   - テーブル制約情報を取得
+   - すべてのテーブル共通で使用可能
 
 **注意：**
 - `example_views_usage.sql` と `example_functions_usage.sql` は実際のテーブルを使用したクエリの例です
 - これらのスクリプトは単発実行や調査用です
 - 実際のアプリケーションでは、`queries/` フォルダのパラメータ化クエリを使用してください
 - スクリプト内のクエリは直接値を指定していますが、本番環境では必ずパラメータ化クエリを使用してください
+- すべてのスクリプト内のクエリは `BEGIN/COMMIT` トランザクションで囲まれています
 
 ---
 
@@ -191,6 +206,9 @@ YYYY-MM-DD_operation_table_name.sql
    - 実行履歴を記録
    - 本番環境での実行は慎重に
    - 単発実行や調査用途
+   - すべてのクエリは `BEGIN/COMMIT` トランザクションで囲む
+   - ビューは `CREATE OR REPLACE VIEW` を使用して作成
+   - ビューは論理削除されていないレコードのみを返すように設計
 
 ---
 

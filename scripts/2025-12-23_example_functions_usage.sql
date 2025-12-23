@@ -18,6 +18,7 @@
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_insert_eso_t_c0020_sr_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0020_sr (
     okyaku_id,
     zumen_id,
@@ -70,9 +71,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_update_eso_t_c0020_sr_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0020_sr
 SET
     shinsetsu_flg                 = 1,
@@ -103,9 +106,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_delete_eso_t_c0020_sr_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0020_sr
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -123,6 +128,7 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- ============================================
 -- 2. 子メーターテーブル操作の使用例
@@ -130,6 +136,7 @@ RETURNING
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_insert_eso_t_c0021_kometer_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0021_kometer (
     okyaku_id,
     zumen_id,
@@ -200,9 +207,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_update_eso_t_c0021_kometer_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0021_kometer
 SET
     shinsetsu_flg                 = 1,
@@ -245,6 +254,7 @@ RETURNING
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-23_delete_eso_t_c0021_kometer_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0021_kometer
 SET
     shinki_koushin_sakujo_flg = 2,

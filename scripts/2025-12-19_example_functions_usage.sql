@@ -18,6 +18,7 @@
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_insert_eso_t_c0014_bundenban_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0014_bundenban (
     okyaku_id,
     zumen_id,
@@ -58,9 +59,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_update_eso_t_c0014_bundenban_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0014_bundenban
 SET
     shinsetsu_flg             = 1,
@@ -83,9 +86,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_delete_eso_t_c0014_bundenban_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0014_bundenban
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -103,6 +108,7 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- ============================================
 -- 2. 計電器テーブル操作の使用例
@@ -110,6 +116,7 @@ RETURNING
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_insert_eso_t_c0015_keidenki_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0015_keidenki (
     okyaku_id,
     zumen_id,
@@ -148,9 +155,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_update_eso_t_c0015_keidenki_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0015_keidenki
 SET
     shinsetsu_flg             = 1,
@@ -172,9 +181,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_delete_eso_t_c0015_keidenki_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0015_keidenki
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -192,6 +203,7 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- ============================================
 -- 3. 低圧変流器テーブル操作の使用例
@@ -199,6 +211,7 @@ RETURNING
 
 -- INSERT操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_insert_eso_t_c0016_ct_table.sql を使用してください
+BEGIN;
 INSERT INTO eso_t_c0016_ct (
     okyaku_id,
     zumen_id,
@@ -249,9 +262,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- UPDATE操作の使用例
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_update_eso_t_c0016_ct_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0016_ct
 SET
     shinsetsu_flg             = 1,
@@ -279,9 +294,11 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
 -- DELETE操作の使用例（論理削除）
 -- 注意：実際のアプリケーションでは、queries/2025-12-19_delete_eso_t_c0016_ct_table.sql を使用してください
+BEGIN;
 UPDATE eso_t_c0016_ct
 SET
     shinki_koushin_sakujo_flg = 2,
@@ -299,4 +316,5 @@ RETURNING
     setsubi_id,
     kotai_id,
     daisu_renban;
+COMMIT;
 
