@@ -1,10 +1,26 @@
 # SQL ファイル管理
 
-このディレクトリには、PostgreSQL用のSQLファイルが3つのフォルダに整理されています。
+このディレクトリには、PostgreSQL用のSQLファイルがテーブルグループごとに整理されています。
 
 ## フォルダ構成
 
-### 📁 migrations/
+SQLファイルは、テーブルグループ（モジュール）ごとに以下のような構造で整理されています：
+
+```
+sql/
+├── teiatsu/              # 低圧関連テーブルグループ
+│   ├── migrations/       # マイグレーションファイル
+│   ├── queries/          # DMLクエリファイル
+│   └── scripts/          # スクリプトファイル
+└── zumen_shisutemu/      # 図面・システム関連テーブルグループ
+    ├── migrations/
+    ├── queries/
+    └── scripts/
+```
+
+各テーブルグループフォルダ内には、以下の3つのサブフォルダがあります：
+
+### 📁 {table_group}/migrations/
 データベース構造の変更（DDL）を管理するマイグレーションファイルを格納します。
 
 **内容：**
@@ -23,9 +39,12 @@
 - マイグレーションツール（Flyway、Liquibase等）で順次実行
 - または、手動で日付順に実行
 
+**ファイルパスの例：**
+- `teiatsu/migrations/2025-12-18_001_create_eso_t_c0011_keiki_table.sql`
+
 ---
 
-### 📁 queries/
+### 📁 {table_group}/queries/
 アプリケーションから実行するDMLクエリ（INSERT、SELECT、UPDATE、DELETE）を格納します。
 
 **内容：**
@@ -63,7 +82,7 @@ const pool = new Pool({
   // データベース接続設定
 });
 
-const query = fs.readFileSync('queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql', 'utf8');
+const query = fs.readFileSync('teiatsu/queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql', 'utf8');
 const values = ['1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001'];
 
 const result = await pool.query(query, values);
@@ -71,7 +90,7 @@ const result = await pool.query(query, values);
 
 ```python
 # Python (psycopg2) の例
-cursor.execute(open('queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql').read(), 
+cursor.execute(open('teiatsu/queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql').read(), 
                ('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.00, '12', '202501', '備考', 1, 'user001', 'user001'))
 ```
 
@@ -93,9 +112,12 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 - アプリケーションから実行する場合は、そのままパラメータ化クエリとして使用できます
 - 直接実行する場合は、ファイル内のPREPARE文の例を参照してください
 
+**ファイルパスの例：**
+- `teiatsu/queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql`
+
 ---
 
-### 📁 scripts/
+### 📁 {table_group}/scripts/
 単発実行や調査用のSQLスクリプトを格納します。
 
 **用途：**
@@ -139,16 +161,22 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
    - テーブル制約情報を取得
    - すべてのテーブル共通で使用可能
 
+**ファイルパスの例：**
+- `teiatsu/scripts/2025-12-18_example_views_usage.sql`
+- `teiatsu/scripts/common_table_definitions.sql`
+
 **注意：**
 - `example_views_usage.sql` と `example_functions_usage.sql` は実際のテーブルを使用したクエリの例です
 - これらのスクリプトは単発実行や調査用です
-- 実際のアプリケーションでは、`queries/` フォルダのパラメータ化クエリを使用してください
+- 実際のアプリケーションでは、`{table_group}/queries/` フォルダのパラメータ化クエリを使用してください
 - スクリプト内のクエリは直接値を指定していますが、本番環境では必ずパラメータ化クエリを使用してください
 - すべてのスクリプト内のクエリは `BEGIN/COMMIT` トランザクションで囲まれています
 
 ---
 
-## テーブル一覧
+## テーブルグループ一覧
+
+### 📦 teiatsu（低圧関連）
 
 現在管理されているテーブル：
 
@@ -163,6 +191,13 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 9. **eso_t_c0019_sc** - 低圧コンデンサテーブル
 10. **eso_t_c0020_sr** - 低圧リアクトルテーブル
 11. **eso_t_c0021_kometer** - 子メーターテーブル
+
+### 📦 zumen_shisutemu（図面・システム関連）
+
+現在管理されているテーブル：
+
+1. **eso_t_c0005_cad_link** - ハイパーリンク管理テーブル
+2. **eso_t_c0006_okyaku_work** - ＣＡＤ編集お客様管理テーブル
 
 ---
 
@@ -200,6 +235,7 @@ YYYY-MM-DD_operation_table_name.sql
    - SELECT * は使用しない
    - 必要に応じてインデックスを活用
    - アプリケーションから直接実行される
+   - テーブルグループごとに `{table_group}/queries/` フォルダに配置
 
 3. **スクリプト**
    - 実行前に必ずバックアップを取得
@@ -214,9 +250,11 @@ YYYY-MM-DD_operation_table_name.sql
 
 ## ファイル構造の原則
 
-- **サブフォルダは使用しない** - すべてのファイルは各フォルダ直下に配置
+- **テーブルグループごとに整理** - 関連するテーブルは同じグループフォルダに配置
+- **各グループ内で3つのサブフォルダを使用** - `migrations/`, `queries/`, `scripts/`
 - **命名規則で整理** - ファイル名の日付と操作タイプで管理
 - **日付順で実行** - マイグレーションファイルは日付順に実行
+- **グループ内で完結** - 各テーブルグループのファイルは、そのグループのフォルダ内に配置
 
 ---
 
