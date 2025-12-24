@@ -37,12 +37,14 @@ sql/
   - すべてのテーブルに `shinki_koushin_sakujo_flg INTEGER` を含む
   - `IF NOT EXISTS` を使用して安全に実行可能
 
-- **`003_alter_columns_*.sql`**: カラム名の変更とタイプ変更
+- **`003_alter_columns_*.sql`**: カラム名の変更、タイプ変更、デフォルト値の設定
   - 構造化されたセクション：
     1. **日付フィールドの変更**: CREATE_DT → create_date, UPDATE_DT → record_date
     2. **ユーザーフィールドの変更**: CREATE_USER → create_user, UPDATE_USER → record_user
-    3. **その他のフィールド変更**: テーブル固有のフィールド名変更
+    3. **その他のフィールド変更**: テーブル固有のフィールド名変更、タイプ変更、デフォルト値の設定
   - すべての操作は `DO $$ ... IF EXISTS ... END $$;` ブロックで囲まれ、冪等性を保証
+  - デフォルト値の設定は、カラム名変更とタイプ変更の後に実行される
+  - デフォルト値を削除する場合は `ALTER COLUMN ... DROP DEFAULT` を使用
 
 **命名規則：**
 - `YYYY-MM-DD_NNN_description_table_name.sql`

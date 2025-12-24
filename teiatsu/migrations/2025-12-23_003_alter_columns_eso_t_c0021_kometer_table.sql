@@ -78,7 +78,6 @@ BEGIN
     END IF;
 END $$;
 
--- create_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -105,7 +104,6 @@ BEGIN
     END IF;
 END $$;
 
--- record_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -162,7 +160,7 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_VLTT_CD → tkaku_v_cd
+-- TKAKU_VLTT_CD (CHAR(2)) → tkaku_v_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -172,6 +170,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0021_kometer
             RENAME COLUMN TKAKU_VLTT_CD TO tkaku_v_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0021_kometer' 
+        AND column_name = 'tkaku_v_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0021_kometer
+            ALTER COLUMN tkaku_v_cd TYPE CHARACTER(2),
+            ALTER COLUMN tkaku_v_cd SET DEFAULT '01';
     END IF;
 END $$;
 
@@ -188,7 +199,7 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_AMPT_CD → tkaku_a_cd
+-- TKAKU_AMPT_CD (CHAR(2)) → tkaku_a_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -198,6 +209,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0021_kometer
             RENAME COLUMN TKAKU_AMPT_CD TO tkaku_a_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0021_kometer' 
+        AND column_name = 'tkaku_a_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0021_kometer
+            ALTER COLUMN tkaku_a_cd TYPE CHARACTER(2),
+            ALTER COLUMN tkaku_a_cd SET DEFAULT '12';
     END IF;
 END $$;
 

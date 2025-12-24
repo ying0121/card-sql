@@ -78,7 +78,6 @@ BEGIN
     END IF;
 END $$;
 
--- create_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -105,7 +104,6 @@ BEGIN
     END IF;
 END $$;
 
--- record_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -149,7 +147,7 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_AMP1 → tkaku_1ji_a
+-- TKAKU_AMP1 (NUMERIC(6,2)) → tkaku_1ji_a (numeric(6, 2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -159,6 +157,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0016_ct
             RENAME COLUMN TKAKU_AMP1 TO tkaku_1ji_a;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0016_ct' 
+        AND column_name = 'tkaku_1ji_a'
+    ) THEN
+        ALTER TABLE eso_t_c0016_ct
+            ALTER COLUMN tkaku_1ji_a TYPE NUMERIC(6, 2),
+            ALTER COLUMN tkaku_1ji_a SET DEFAULT 1;
     END IF;
 END $$;
 
@@ -175,7 +186,7 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_AMP2 → tkaku_2ji_a
+-- TKAKU_AMP2 (NUMERIC(6,2)) → tkaku_2ji_a (numeric(6, 2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -188,7 +199,20 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_AMP2T_CD → tkaku_2ji_a_cd
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0016_ct' 
+        AND column_name = 'tkaku_2ji_a'
+    ) THEN
+        ALTER TABLE eso_t_c0016_ct
+            ALTER COLUMN tkaku_2ji_a TYPE NUMERIC(6, 2),
+            ALTER COLUMN tkaku_2ji_a SET DEFAULT 12;
+    END IF;
+END $$;
+
+-- TKAKU_AMP2T_CD (CHAR(2)) → tkaku_2ji_a_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -198,6 +222,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0016_ct
             RENAME COLUMN TKAKU_AMP2T_CD TO tkaku_2ji_a_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0016_ct' 
+        AND column_name = 'tkaku_2ji_a_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0016_ct
+            ALTER COLUMN tkaku_2ji_a_cd TYPE CHARACTER(2),
+            ALTER COLUMN tkaku_2ji_a_cd DROP DEFAULT;
     END IF;
 END $$;
 

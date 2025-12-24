@@ -78,7 +78,6 @@ BEGIN
     END IF;
 END $$;
 
--- create_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -105,7 +104,6 @@ BEGIN
     END IF;
 END $$;
 
--- record_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -123,7 +121,7 @@ END $$;
 -- その他のフィールド変更
 -- ============================================
 
--- TKAKU_AMP → tkaku_a
+-- TKAKU_AMP (NUMERIC(6,2)) → tkaku_a (numeric(4, 2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -136,7 +134,7 @@ BEGIN
     END IF;
 END $$;
 
--- TKAKU_AMPT_CD → tkaku_a_cd
+-- TKAKU_AMPT_CD (CHAR(2)) → tkaku_a_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -146,6 +144,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0012_kaiheiki
             RENAME COLUMN TKAKU_AMPT_CD TO tkaku_a_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0012_kaiheiki' 
+        AND column_name = 'tkaku_a_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0012_kaiheiki
+            ALTER COLUMN tkaku_a_cd TYPE CHARACTER(2),
+            ALTER COLUMN tkaku_a_cd SET DEFAULT '12';
     END IF;
 END $$;
 
@@ -162,7 +173,7 @@ BEGIN
     END IF;
 END $$;
 
--- KANDO_AMPT_CD → kando_a_cd
+-- KANDO_AMPT_CD (CHAR(2)) → kando_a_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -172,6 +183,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0012_kaiheiki
             RENAME COLUMN KANDO_AMPT_CD TO kando_a_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0012_kaiheiki' 
+        AND column_name = 'kando_a_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0012_kaiheiki
+            ALTER COLUMN kando_a_cd TYPE CHARACTER(2),
+            ALTER COLUMN kando_a_cd SET DEFAULT '11';
     END IF;
 END $$;
 
@@ -185,6 +209,18 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0012_kaiheiki
             RENAME COLUMN SEIZO_Y_FLG TO seizo_nennomi_flg;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0012_kaiheiki' 
+        AND column_name = 'seizo_nennomi_flg'
+    ) THEN
+        ALTER TABLE eso_t_c0012_kaiheiki
+            ALTER COLUMN seizo_nennomi_flg SET DEFAULT 0;
     END IF;
 END $$;
 

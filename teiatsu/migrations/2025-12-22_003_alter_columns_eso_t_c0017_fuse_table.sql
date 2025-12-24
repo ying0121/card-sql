@@ -78,7 +78,6 @@ BEGIN
     END IF;
 END $$;
 
--- create_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -105,7 +104,6 @@ BEGIN
     END IF;
 END $$;
 
--- record_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -123,7 +121,7 @@ END $$;
 -- その他のフィールド変更
 -- ============================================
 
--- CAP → yoryo
+-- CAP (NUMERIC(6,2)) → yoryo (numeric(6, 2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -136,7 +134,20 @@ BEGIN
     END IF;
 END $$;
 
--- CAPT_CD → yoryo_cd
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0017_fuse' 
+        AND column_name = 'yoryo'
+    ) THEN
+        ALTER TABLE eso_t_c0017_fuse
+            ALTER COLUMN yoryo TYPE NUMERIC(6, 2),
+            ALTER COLUMN yoryo SET DEFAULT 0;
+    END IF;
+END $$;
+
+-- CAPT_CD (CHAR(2)) → yoryo_cd (character(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -149,7 +160,20 @@ BEGIN
     END IF;
 END $$;
 
--- FUSE_CNT → fuse_su
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0017_fuse' 
+        AND column_name = 'yoryo_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0017_fuse
+            ALTER COLUMN yoryo_cd TYPE CHARACTER(2),
+            ALTER COLUMN yoryo_cd SET DEFAULT '12';
+    END IF;
+END $$;
+
+-- FUSE_CNT (NUMERIC(2,0)) → fuse_su (numeric(2))
 DO $$
 BEGIN
     IF EXISTS (
@@ -159,6 +183,19 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0017_fuse
             RENAME COLUMN FUSE_CNT TO fuse_su;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'eso_t_c0017_fuse' 
+        AND column_name = 'fuse_su'
+    ) THEN
+        ALTER TABLE eso_t_c0017_fuse
+            ALTER COLUMN fuse_su TYPE NUMERIC(2),
+            ALTER COLUMN fuse_su SET DEFAULT 3;
     END IF;
 END $$;
 

@@ -78,7 +78,6 @@ BEGIN
     END IF;
 END $$;
 
--- create_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
@@ -105,7 +104,6 @@ BEGIN
     END IF;
 END $$;
 
--- record_user フィールドのタイプ変更とNOT NULL制約の設定
 DO $$
 BEGIN
     IF EXISTS (
