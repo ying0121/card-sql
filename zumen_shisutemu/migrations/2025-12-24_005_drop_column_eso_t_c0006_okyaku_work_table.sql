@@ -1,8 +1,8 @@
 
 -- 2025-12-24_005_drop_column_eso_t_c0006_okyaku_work.sql
 -- 目的：ＣＡＤ編集お客様管理テーブルからKYOKAI_CDカラムを削除
--- 更新日: 2025-12-24
--- 更新者: ikou2027
+-- 作成日: 2025-12-24
+-- 作成者: 浦大輔
 -- 対象DB：PostgreSQL
 
 BEGIN;
