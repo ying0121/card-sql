@@ -1,0 +1,17 @@
+
+-- 2025-12-25_002_add_columns_eso_t_c0009_numbering.sql
+-- 目的：採番テーブルに追加項目を追加
+-- 更新日: 2025-12-25
+-- 更新者: 浦大輔
+-- 対象DB：PostgreSQL
+
+BEGIN;
+
+ALTER TABLE eso_t_c0009_numbering
+    ADD COLUMN IF NOT EXISTS create_user VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS record_user VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS shinki_koushin_sakujo_flg INTEGER;
+
+COMMIT;
+
+

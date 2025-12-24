@@ -31,6 +31,19 @@ sql/
 - カラム削除（`005_drop_column_*.sql`）
 - カラムコメント追加（`006_add_comments_*.sql`）
 
+**マイグレーションファイルの詳細：**
+
+- **`002_add_columns_*.sql`**: 新しいカラムを追加
+  - すべてのテーブルに `shinki_koushin_sakujo_flg INTEGER` を含む
+  - `IF NOT EXISTS` を使用して安全に実行可能
+
+- **`003_alter_columns_*.sql`**: カラム名の変更とタイプ変更
+  - 構造化されたセクション：
+    1. **日付フィールドの変更**: CREATE_DT → create_date, UPDATE_DT → record_date
+    2. **ユーザーフィールドの変更**: CREATE_USER → create_user, UPDATE_USER → record_user
+    3. **その他のフィールド変更**: テーブル固有のフィールド名変更
+  - すべての操作は `DO $$ ... IF EXISTS ... END $$;` ブロックで囲まれ、冪等性を保証
+
 **命名規則：**
 - `YYYY-MM-DD_NNN_description_table_name.sql`
 - 日付順に実行されるため、日付と連番で順序を管理
@@ -198,6 +211,9 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 
 1. **eso_t_c0005_cad_link** - ハイパーリンク管理テーブル
 2. **eso_t_c0006_okyaku_work** - ＣＡＤ編集お客様管理テーブル
+3. **eso_t_c0007_image** - 画像情報テーブル
+4. **eso_t_c0008_file_work** - 編集画像テーブル
+5. **eso_t_c0009_numbering** - 採番テーブル
 
 ---
 
@@ -229,6 +245,9 @@ YYYY-MM-DD_operation_table_name.sql
    - 変更は必ず新しいSQLファイルを追加
    - トランザクション（BEGIN/COMMIT）を使用
    - 日付順に実行されるため、日付と連番で順序を管理
+   - `alter_columns` ファイルは構造化されたセクションで整理（日付フィールド、ユーザーフィールド、その他）
+   - すべての `ALTER` 操作は `IF EXISTS` チェックを使用して冪等性を保証
+   - `add_columns` ファイルには必ず `shinki_koushin_sakujo_flg INTEGER` を含む
 
 2. **クエリ**
    - すべてパラメータ化（SQLインジェクション対策）
