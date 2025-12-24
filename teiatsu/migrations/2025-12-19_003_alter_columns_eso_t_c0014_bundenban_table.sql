@@ -134,5 +134,38 @@ BEGIN
     END IF;
 END $$;
 
+-- ============================================
+-- データ移行：作成者／作成日／更新者／更新日の設定
+-- ============================================
+-- ルール：
+-- 1. 現行システムで値が設定されている場合：現行の値をそのまま移行（「システム」も維持）
+-- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
+DO $$
+DECLARE
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-19 00:00:00'::timestamp;
+    migration_user VARCHAR(100) := 'ikou2027';
+BEGIN
+    -- 値が未設定の場合のデフォルト設定
+    UPDATE eso_t_c0014_bundenban
+    SET
+        create_user = CASE 
+            WHEN create_user IS NOT NULL AND TRIM(create_user) != '' 
+            THEN create_user 
+            ELSE migration_user 
+        END,
+        create_date = COALESCE(create_date, migration_date),
+        record_user = CASE 
+            WHEN record_user IS NOT NULL AND TRIM(record_user) != '' 
+            THEN record_user 
+            ELSE migration_user 
+        END,
+        record_date = COALESCE(record_date, migration_date)
+    WHERE
+        (create_user IS NULL OR TRIM(create_user) = '')
+        OR create_date IS NULL
+        OR (record_user IS NULL OR TRIM(record_user) = '')
+        OR record_date IS NULL;
+END $$;
+
 COMMIT;
 
