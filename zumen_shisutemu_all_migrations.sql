@@ -562,23 +562,23 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0005_cad_link.okyaku_id IS '場所ID';
+COMMENT ON COLUMN eso_t_c0005_cad_link.okyaku_id IS 'お客さまID';
 COMMENT ON COLUMN eso_t_c0005_cad_link.link_moto_id IS 'リンク元ID';
 COMMENT ON COLUMN eso_t_c0005_cad_link.moto_zumen_id IS 'リンク元図面ID';
 COMMENT ON COLUMN eso_t_c0005_cad_link.link_saki_id IS 'リンク先ID';
 COMMENT ON COLUMN eso_t_c0005_cad_link.saki_zumen_id IS 'リンク先図面ID';
-COMMENT ON COLUMN eso_t_c0005_cad_link.saki_title_mj IS 'リンク先タイトル';
+COMMENT ON COLUMN eso_t_c0005_cad_link.saki_title_mj IS 'リンク先図面タイトル';
 COMMENT ON COLUMN eso_t_c0005_cad_link.saki_name_mj IS 'リンク先名称';
 COMMENT ON COLUMN eso_t_c0005_cad_link.saki_setsubi_id IS 'リンク先設備ID';
 COMMENT ON COLUMN eso_t_c0005_cad_link.saki_shubetsu_mj IS 'リンク先種別';
-COMMENT ON COLUMN eso_t_c0005_cad_link.moto_zumen_han_su IS 'リンク元図面版数';
-COMMENT ON COLUMN eso_t_c0005_cad_link.saki_zumen_han_su IS 'リンク先図面版数';
-COMMENT ON COLUMN eso_t_c0005_cad_link.saki_zumen_shubetsu_su IS 'リンク先図面種別数';
-COMMENT ON COLUMN eso_t_c0005_cad_link.create_date IS '作成日時';
+COMMENT ON COLUMN eso_t_c0005_cad_link.moto_zumen_han_su IS 'リンク元図面版';
+COMMENT ON COLUMN eso_t_c0005_cad_link.saki_zumen_han_su IS 'リンク先図面版';
+COMMENT ON COLUMN eso_t_c0005_cad_link.saki_zumen_shubetsu_su IS 'リンク先図面種別';
+COMMENT ON COLUMN eso_t_c0005_cad_link.create_date IS '作成日';
 COMMENT ON COLUMN eso_t_c0005_cad_link.create_user IS '作成者';
-COMMENT ON COLUMN eso_t_c0005_cad_link.record_date IS '記録日時';
-COMMENT ON COLUMN eso_t_c0005_cad_link.record_user IS '記録者';
-COMMENT ON COLUMN eso_t_c0005_cad_link.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0005_cad_link.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0005_cad_link.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0005_cad_link.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
@@ -586,20 +586,20 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.okyaku_id IS '場所ID';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.okyaku_id IS 'お客さまID';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.yoto_kbn IS '用途区分';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.user_nm_mj IS 'ユーザー名';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.lock_flg IS 'ロックフラグ';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.edit_flg IS '編集フラグ';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.tenkenjisseki_id IS '点検実績ID';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.json_binary_byt IS 'JSONバイナリ';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.zumen_binary_byt IS '図面バイナリ';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.renkei_mode_su IS '連携モード数';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.create_date IS '作成日時';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.json_binary_byt IS '属性ファイルバイナリ';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.zumen_binary_byt IS '図面ファイルバイナリ';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.renkei_mode_su IS '連携モード';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.create_date IS '作成日';
 COMMENT ON COLUMN eso_t_c0006_okyaku_work.create_user IS '作成者';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.record_date IS '記録日時';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.record_user IS '記録者';
-COMMENT ON COLUMN eso_t_c0006_okyaku_work.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0006_okyaku_work.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
@@ -607,19 +607,19 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0007_image.okyaku_id IS '場所ID';
+COMMENT ON COLUMN eso_t_c0007_image.okyaku_id IS 'お客さまID';
 COMMENT ON COLUMN eso_t_c0007_image.image_id IS '画像ID';
-COMMENT ON COLUMN eso_t_c0007_image.image_kbn_su IS '画像区分数';
+COMMENT ON COLUMN eso_t_c0007_image.image_kbn_su IS '画像区分';
 COMMENT ON COLUMN eso_t_c0007_image.shikibetsu_id IS '識別ID';
 COMMENT ON COLUMN eso_t_c0007_image.zumen_id IS '図面ID';
 COMMENT ON COLUMN eso_t_c0007_image.title_mj IS 'タイトル';
-COMMENT ON COLUMN eso_t_c0007_image.ordr_jn IS '順序';
+COMMENT ON COLUMN eso_t_c0007_image.ordr_jn IS '表示順';
 COMMENT ON COLUMN eso_t_c0007_image.file_name_mj IS 'ファイル名';
-COMMENT ON COLUMN eso_t_c0007_image.create_date IS '作成日時';
+COMMENT ON COLUMN eso_t_c0007_image.create_date IS '作成日';
 COMMENT ON COLUMN eso_t_c0007_image.create_user IS '作成者';
-COMMENT ON COLUMN eso_t_c0007_image.record_date IS '記録日時';
-COMMENT ON COLUMN eso_t_c0007_image.record_user IS '記録者';
-COMMENT ON COLUMN eso_t_c0007_image.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0007_image.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0007_image.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0007_image.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
@@ -1046,22 +1046,22 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0008_file_work.okyaku_id IS '場所ID';
+COMMENT ON COLUMN eso_t_c0008_file_work.okyaku_id IS 'お客さまID';
 COMMENT ON COLUMN eso_t_c0008_file_work.image_id IS '画像ID';
 COMMENT ON COLUMN eso_t_c0008_file_work.lock_flg IS 'ロックフラグ';
-COMMENT ON COLUMN eso_t_c0008_file_work.image_kbn_su IS '画像区分数';
+COMMENT ON COLUMN eso_t_c0008_file_work.image_kbn_su IS '画像区分';
 COMMENT ON COLUMN eso_t_c0008_file_work.shikibetsu_id IS '識別ID';
 COMMENT ON COLUMN eso_t_c0008_file_work.zumen_id IS '図面ID';
 COMMENT ON COLUMN eso_t_c0008_file_work.title_mj IS 'タイトル';
-COMMENT ON COLUMN eso_t_c0008_file_work.ordr_jn IS '順序';
+COMMENT ON COLUMN eso_t_c0008_file_work.ordr_jn IS '表示順';
 COMMENT ON COLUMN eso_t_c0008_file_work.file_kbn_mj IS 'ファイル区分';
 COMMENT ON COLUMN eso_t_c0008_file_work.file_name_mj IS 'ファイル名';
 COMMENT ON COLUMN eso_t_c0008_file_work.file_binary_byt IS 'ファイルバイナリ';
-COMMENT ON COLUMN eso_t_c0008_file_work.create_date IS '作成日時';
+COMMENT ON COLUMN eso_t_c0008_file_work.create_date IS '作成日';
 COMMENT ON COLUMN eso_t_c0008_file_work.create_user IS '作成者';
-COMMENT ON COLUMN eso_t_c0008_file_work.record_date IS '記録日時';
-COMMENT ON COLUMN eso_t_c0008_file_work.record_user IS '記録者';
-COMMENT ON COLUMN eso_t_c0008_file_work.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0008_file_work.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0008_file_work.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0008_file_work.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
@@ -1069,14 +1069,14 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0009_numbering.okyaku_id IS '場所ID';
+COMMENT ON COLUMN eso_t_c0009_numbering.okyaku_id IS 'お客さまID';
 COMMENT ON COLUMN eso_t_c0009_numbering.yoto_kbn IS '用途区分';
 COMMENT ON COLUMN eso_t_c0009_numbering.value_su IS '値';
 COMMENT ON COLUMN eso_t_c0009_numbering.biko_mj IS '備考';
-COMMENT ON COLUMN eso_t_c0009_numbering.create_date IS '作成日時';
+COMMENT ON COLUMN eso_t_c0009_numbering.create_date IS '作成日';
 COMMENT ON COLUMN eso_t_c0009_numbering.create_user IS '作成者';
-COMMENT ON COLUMN eso_t_c0009_numbering.record_date IS '記録日時';
-COMMENT ON COLUMN eso_t_c0009_numbering.record_user IS '記録者';
-COMMENT ON COLUMN eso_t_c0009_numbering.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0009_numbering.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0009_numbering.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0009_numbering.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;

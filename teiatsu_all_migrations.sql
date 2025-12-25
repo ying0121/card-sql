@@ -569,16 +569,28 @@ END $$;
 -- その他のフィールド変更
 -- ============================================
 
--- TKAKU_AMP (NUMERIC(6,2)) → tkaku_a (numeric(4, 2))
+-- TKAKU_AMP (NUMERIC(6,2)) → tkaku_a (numeric(6))
 DO $$
 BEGIN
     IF EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'eso_t_c0012_kaiheiki' 
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0012_kaiheiki'
         AND column_name = 'TKAKU_AMP'
     ) THEN
         ALTER TABLE eso_t_c0012_kaiheiki
             RENAME COLUMN TKAKU_AMP TO tkaku_a;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0012_kaiheiki'
+        AND column_name = 'tkaku_a'
+    ) THEN
+        ALTER TABLE eso_t_c0012_kaiheiki
+            ALTER COLUMN tkaku_a TYPE NUMERIC(6);
     END IF;
 END $$;
 
@@ -886,6 +898,130 @@ COMMIT;
 
 BEGIN;
 
+-- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
+CREATE INDEX IF NOT EXISTS idx_eso_t_c0011_keiki_okyaku_zumen_flg_ordr
+    ON eso_t_c0011_keiki (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, ordr_jn);
+
+COMMIT;
+
+
+BEGIN;
+
+-- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
+CREATE INDEX IF NOT EXISTS idx_eso_t_c0012_kaiheiki_okyaku_zumen_flg_ordr
+    ON eso_t_c0012_kaiheiki (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, ordr_jn);
+
+COMMIT;
+
+
+BEGIN;
+
+-- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
+-- ORDER BYが setsubi_id, kotai_id, daisu_renban なので、それらも含める
+CREATE INDEX IF NOT EXISTS idx_eso_t_c0013_cable_okyaku_zumen_flg_setsubi_kotai_daisu
+    ON eso_t_c0013_cable (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, setsubi_id, kotai_id, daisu_renban);
+
+COMMIT;
+
+
+BEGIN;
+
+ALTER TABLE eso_t_c0011_keiki
+    DROP COLUMN IF EXISTS KENMAN;
+
+COMMIT;
+
+
+BEGIN;
+
+ALTER TABLE eso_t_c0012_kaiheiki
+    DROP COLUMN IF EXISTS SYMBOL_MUKI;
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0011_keiki.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0011_keiki.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0011_keiki.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0011_keiki.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0011_keiki.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0011_keiki.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0011_keiki.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_v IS '定格電圧';
+COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_v_cd IS '定格電圧単位';
+COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_a IS '定格電流';
+COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_a_cd IS '定格電流単位';
+COMMENT ON COLUMN eso_t_c0011_keiki.seizo_ym IS '製造年月';
+COMMENT ON COLUMN eso_t_c0011_keiki.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0011_keiki.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0011_keiki.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0011_keiki.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0011_keiki.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0011_keiki.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0011_keiki.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.genba_kakuninzumi_meibanto_flg IS '現場確認済（銘板等）フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.kyokusu IS '極数';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.tkaku_a IS '定格電流';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.tkaku_a_cd IS '定格電流単位';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.tkaku_a_kakuninkonnan_flg IS '定格電流確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.fuse_kva IS 'ヒューズ容量';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.fuse_kva_cd IS 'ヒューズ容量単位';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.fuse_kva_kakuninkonnan_flg IS 'ヒューズ容量確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.kando_a IS '感度電流';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.kando_a_cd IS '感度電流単位';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.kando_a_kakuninkonnan_flg IS '感度電流確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_ym IS '製造年月';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_nennomi_flg IS '製造年のみ入力フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_ym_kakuninkonnan_flg IS '製造年月確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.ikisaki IS '行先';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0012_kaiheiki.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0013_cable.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0013_cable.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0013_cable.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0013_cable.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0013_cable.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0013_cable.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0013_cable.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0013_cable.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0013_cable.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0013_cable.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0013_cable.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0013_cable.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0013_cable.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0013_cable.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
 CREATE TABLE IF NOT EXISTS eso_t_c0014_bundenban (
     okyaku_id                       CHARACTER(10) NOT NULL,
     zumen_id                        NUMERIC(8) NOT NULL,
@@ -898,6 +1034,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0014_bundenban (
     shurui_cd                       CHARACTER(2),
 
     waku_nm                         VARCHAR(40),
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -935,6 +1073,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0015_keidenki (
     shinsetsu_flg                   INTEGER DEFAULT 1,
 
     shurui_cd                       CHARACTER(2),
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -981,6 +1121,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0016_ct (
     tkaku_2ji_a_cd                  CHARACTER(2),
 
     kantsu_su                       NUMERIC(2),
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -1661,34 +1803,6 @@ COMMIT;
 BEGIN;
 
 -- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
-CREATE INDEX IF NOT EXISTS idx_eso_t_c0011_keiki_okyaku_zumen_flg_ordr
-    ON eso_t_c0011_keiki (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, ordr_jn);
-
-COMMIT;
-
-
-BEGIN;
-
--- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
-CREATE INDEX IF NOT EXISTS idx_eso_t_c0012_kaiheiki_okyaku_zumen_flg_ordr
-    ON eso_t_c0012_kaiheiki (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, ordr_jn);
-
-COMMIT;
-
-
-BEGIN;
-
--- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
--- ORDER BYが setsubi_id, kotai_id, daisu_renban なので、それらも含める
-CREATE INDEX IF NOT EXISTS idx_eso_t_c0013_cable_okyaku_zumen_flg_setsubi_kotai_daisu
-    ON eso_t_c0013_cable (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, setsubi_id, kotai_id, daisu_renban);
-
-COMMIT;
-
-
-BEGIN;
-
--- WHERE句とORDER BY句で使用されるカラムにインデックスを作成
 CREATE INDEX IF NOT EXISTS idx_eso_t_c0014_bundenban_okyaku_zumen_flg_ordr
     ON eso_t_c0014_bundenban (okyaku_id, zumen_id, shinki_koushin_sakujo_flg, ordr_jn);
 
@@ -1715,16 +1829,66 @@ COMMIT;
 
 BEGIN;
 
-ALTER TABLE eso_t_c0011_keiki
-    DROP COLUMN IF EXISTS KENMAN;
+COMMENT ON COLUMN eso_t_c0014_bundenban.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0014_bundenban.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0014_bundenban.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0014_bundenban.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0014_bundenban.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0014_bundenban.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0014_bundenban.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0014_bundenban.waku_nm IS '枠名称';
+COMMENT ON COLUMN eso_t_c0014_bundenban.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0014_bundenban.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0014_bundenban.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0014_bundenban.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0014_bundenban.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0014_bundenban.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0014_bundenban.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
 
 BEGIN;
 
-ALTER TABLE eso_t_c0012_kaiheiki
-    DROP COLUMN IF EXISTS SYMBOL_MUKI;
+COMMENT ON COLUMN eso_t_c0015_keidenki.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0015_keidenki.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0015_keidenki.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0015_keidenki.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0015_keidenki.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0015_keidenki.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0015_keidenki.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0015_keidenki.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0015_keidenki.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0015_keidenki.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0015_keidenki.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0015_keidenki.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0015_keidenki.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0015_keidenki.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0016_ct.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0016_ct.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0016_ct.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0016_ct.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0016_ct.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0016_ct.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_v IS '定格電圧';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_v_cd IS '定格電圧単位';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_1ji_a IS '定格１次電流';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_1ji_a_cd IS '定格１次電流単位';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_2ji_a IS '定格２次電流';
+COMMENT ON COLUMN eso_t_c0016_ct.tkaku_2ji_a_cd IS '定格２次電流単位';
+COMMENT ON COLUMN eso_t_c0016_ct.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0016_ct.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0016_ct.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0016_ct.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0016_ct.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0016_ct.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0016_ct.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
@@ -1742,6 +1906,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0017_fuse (
     yoryo_cd                        CHARACTER(2) DEFAULT '12',
 
     fuse_su                         NUMERIC(2) DEFAULT 3,
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -1778,6 +1944,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0018_kansen (
 
     haisen_su                       NUMERIC(1),
 
+    biko                            VARCHAR(256),
+
     ordr_jn                         INTEGER,
 
     create_date                     TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT now(),
@@ -1809,15 +1977,21 @@ CREATE TABLE IF NOT EXISTS eso_t_c0019_sc (
 
     shinsetsu_flg                   INTEGER DEFAULT 1,
 
+    genba_kakuninzumi_meibanto_flg  INTEGER DEFAULT 0,
+
     tkaku_v                         NUMERIC(4, 2),
     tkaku_v_cd                      CHARACTER(2) DEFAULT '12',
 
     tkaku_kva                       NUMERIC(4, 2),
     tkaku_kva_cd                    CHARACTER(2) DEFAULT '12',
+    tkaku_kva_kakuninkonnan_flg     INTEGER DEFAULT 0,
 
     seizo_ym                        CHARACTER(6),
 
     seizo_nennomi_flg               INTEGER DEFAULT 0,
+    seizo_ym_kakuninkonnan_flg      INTEGER DEFAULT 0,
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -2614,6 +2788,77 @@ COMMIT;
 
 
 
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0017_fuse.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0017_fuse.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0017_fuse.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0017_fuse.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0017_fuse.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0017_fuse.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0017_fuse.yoryo IS '容量';
+COMMENT ON COLUMN eso_t_c0017_fuse.yoryo_cd IS '容量単位';
+COMMENT ON COLUMN eso_t_c0017_fuse.fuse_su IS 'ヒューズ本数';
+COMMENT ON COLUMN eso_t_c0017_fuse.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0017_fuse.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0017_fuse.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0017_fuse.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0017_fuse.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0017_fuse.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0017_fuse.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0018_kansen.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0018_kansen.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0018_kansen.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0018_kansen.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0018_kansen.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0018_kansen.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0018_kansen.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0018_kansen.haisen_su IS '配線本数';
+COMMENT ON COLUMN eso_t_c0018_kansen.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0018_kansen.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0018_kansen.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0018_kansen.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0018_kansen.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0018_kansen.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0018_kansen.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
+BEGIN;
+
+COMMENT ON COLUMN eso_t_c0019_sc.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0019_sc.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0019_sc.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0019_sc.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0019_sc.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0019_sc.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0019_sc.genba_kakuninzumi_meibanto_flg IS '現場確認済（銘板等）フラグ';
+COMMENT ON COLUMN eso_t_c0019_sc.tkaku_v IS '定格電圧';
+COMMENT ON COLUMN eso_t_c0019_sc.tkaku_v_cd IS '定格電圧単位';
+COMMENT ON COLUMN eso_t_c0019_sc.tkaku_kva IS '定格容量';
+COMMENT ON COLUMN eso_t_c0019_sc.tkaku_kva_cd IS '定格容量単位';
+COMMENT ON COLUMN eso_t_c0019_sc.tkaku_kva_kakuninkonnan_flg IS '定格容量確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0019_sc.seizo_ym IS '製造年月';
+COMMENT ON COLUMN eso_t_c0019_sc.seizo_nennomi_flg IS '製造年のみ入力フラグ';
+COMMENT ON COLUMN eso_t_c0019_sc.seizo_ym_kakuninkonnan_flg IS '製造年月確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0019_sc.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0019_sc.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0019_sc.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0019_sc.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0019_sc.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0019_sc.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0019_sc.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
+
+COMMIT;
+
+
 CREATE TABLE IF NOT EXISTS eso_t_c0020_sr (
     okyaku_id                       CHARACTER(10) NOT NULL,
     zumen_id                        NUMERIC(8) NOT NULL,
@@ -2623,15 +2868,23 @@ CREATE TABLE IF NOT EXISTS eso_t_c0020_sr (
 
     shinsetsu_flg                   INTEGER DEFAULT 1,
 
+    genba_kakuninzumi_meibanto_flg  INTEGER DEFAULT 0,
+
+    shurui_cd                       CHARACTER(2),
+
     tkaku_v                         NUMERIC(4, 2),
     tkaku_v_cd                      CHARACTER(2) DEFAULT '12',
 
     tkaku_kva                       NUMERIC(4, 2),
     tkaku_kva_cd                    CHARACTER(2) DEFAULT '12',
+    tkaku_kva_kakuninkonnan_flg     INTEGER DEFAULT 0,
 
     seizo_ym                        CHARACTER(6),
 
     seizo_nennomi_flg               INTEGER DEFAULT 0,
+    seizo_ym_kakuninkonnan_flg      INTEGER DEFAULT 0,
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 
@@ -2679,12 +2932,21 @@ CREATE TABLE IF NOT EXISTS eso_t_c0021_kometer (
     tkaku_a_cd                     CHARACTER(2) DEFAULT '12',
 
     meter_yuko_ym                  CHARACTER(6),
+    meter_yuko_ym_kakuninkonnan_flg INTEGER DEFAULT 0,
 
     ct_yuko_ym                     CHARACTER(6),
+    ct_yuko_ym_kakuninkonnan_flg    INTEGER DEFAULT 0,
 
     seizosha_cd                    CHARACTER(4),
+    seizosha_jiyunyuryoku          VARCHAR(32),
+    seizosha_kakuninkonnan_flg     INTEGER DEFAULT 0,
 
     katashiki_cd                   CHARACTER(4),
+    katashiki_gaitonashi_flg       INTEGER DEFAULT 0,
+    katashiki_jiyunyuryoku         VARCHAR(32),
+    katashiki_kakuninkonnan_flg    INTEGER DEFAULT 0,
+
+    biko                           VARCHAR(256),
 
     ordr_jn                        INTEGER,
 
@@ -3275,7 +3537,7 @@ BEGIN
     END IF;
 END $$;
 
--- KATASHIKI → katashiki_cd
+-- KATASHIKI (VARCHAR(32)) → katashiki_cd (character(4))
 DO $$
 BEGIN
     IF EXISTS (
@@ -3285,6 +3547,18 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0021_kometer
             RENAME COLUMN KATASHIKI TO katashiki_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0021_kometer'
+        AND column_name = 'katashiki_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0021_kometer
+            ALTER COLUMN katashiki_cd TYPE CHARACTER(4);
     END IF;
 END $$;
 
@@ -3369,186 +3643,66 @@ COMMIT;
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0011_keiki.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0011_keiki.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0011_keiki.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0011_keiki.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0011_keiki.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0011_keiki.shurui_cd IS 'コードマスタ 500001';
-COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_v_cd IS 'コードマスタ 999001 V固定';
-COMMENT ON COLUMN eso_t_c0011_keiki.tkaku_a_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0011_keiki.seizo_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0011_keiki.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0020_sr.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0020_sr.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0020_sr.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0020_sr.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0020_sr.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0020_sr.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0020_sr.genba_kakuninzumi_meibanto_flg IS '現場確認済（銘板等）フラグ';
+COMMENT ON COLUMN eso_t_c0020_sr.shurui_cd IS '種類';
+COMMENT ON COLUMN eso_t_c0020_sr.tkaku_v IS '定格電圧';
+COMMENT ON COLUMN eso_t_c0020_sr.tkaku_v_cd IS '定格電圧単位';
+COMMENT ON COLUMN eso_t_c0020_sr.tkaku_kva IS '定格容量';
+COMMENT ON COLUMN eso_t_c0020_sr.tkaku_kva_cd IS '定格容量単位';
+COMMENT ON COLUMN eso_t_c0020_sr.tkaku_kva_kakuninkonnan_flg IS '定格容量確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0020_sr.seizo_ym IS '製造年月';
+COMMENT ON COLUMN eso_t_c0020_sr.seizo_nennomi_flg IS '製造年のみ入力フラグ';
+COMMENT ON COLUMN eso_t_c0020_sr.seizo_ym_kakuninkonnan_flg IS '製造年月確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0020_sr.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0020_sr.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0020_sr.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0020_sr.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0020_sr.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0020_sr.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0020_sr.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;
 
 
 BEGIN;
 
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.genba_kakuninzumi_meibanto_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.shurui_cd IS 'コードマスタ 510001';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.kyokusu IS 'コードマスタ';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.tkaku_a_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.tkaku_a_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.fuse_kva_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.fuse_kva_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.kando_a_cd IS 'コードマスタ 999002 mA固定';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.kando_a_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_nennomi_flg IS '0:年月を入力 1:年のみ入力';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.seizo_ym_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0012_kaiheiki.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0013_cable.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0013_cable.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0013_cable.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0013_cable.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0013_cable.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0013_cable.shurui_cd IS 'コードマスタ 520001';
-COMMENT ON COLUMN eso_t_c0013_cable.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0014_bundenban.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0014_bundenban.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0014_bundenban.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0014_bundenban.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0014_bundenban.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0014_bundenban.shurui_cd IS 'コードマスタ 530001';
-COMMENT ON COLUMN eso_t_c0014_bundenban.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0015_keidenki.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0015_keidenki.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0015_keidenki.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0015_keidenki.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0015_keidenki.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0015_keidenki.shurui_cd IS 'コードマスタ 540001';
-COMMENT ON COLUMN eso_t_c0015_keidenki.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0016_ct.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0016_ct.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0016_ct.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0016_ct.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0016_ct.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0016_ct.tkaku_v_cd IS 'コードマスタ 999001 V固定';
-COMMENT ON COLUMN eso_t_c0016_ct.tkaku_1ji_a_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0016_ct.tkaku_2ji_a_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0016_ct.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0017_fuse.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0017_fuse.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0017_fuse.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0017_fuse.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0017_fuse.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0017_fuse.yoryo_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0017_fuse.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0018_kansen.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0018_kansen.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0018_kansen.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0018_kansen.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0018_kansen.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0018_kansen.shurui_cd IS 'コードマスタ 550001';
-COMMENT ON COLUMN eso_t_c0018_kansen.haisen_su IS '種類により自動設定';
-COMMENT ON COLUMN eso_t_c0018_kansen.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0019_sc.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0019_sc.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0019_sc.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0019_sc.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0019_sc.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0019_sc.genba_kakuninzumi_meibanto_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0019_sc.tkaku_v_cd IS 'コードマスタ 999001 V固定';
-COMMENT ON COLUMN eso_t_c0019_sc.tkaku_kva_cd IS 'コードマスタ 999203';
-COMMENT ON COLUMN eso_t_c0019_sc.tkaku_kva_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0019_sc.seizo_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0019_sc.seizo_nennomi_flg IS '0:年月を入力 1:年のみ入力';
-COMMENT ON COLUMN eso_t_c0019_sc.seizo_ym_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0019_sc.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0020_sr.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0020_sr.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0020_sr.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0020_sr.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0020_sr.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0020_sr.shurui_cd IS 'コードマスタ 550001';
-COMMENT ON COLUMN eso_t_c0020_sr.genba_kakuninzumi_meibanto_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0020_sr.tkaku_v_cd IS 'コードマスタ 999001 V固定';
-COMMENT ON COLUMN eso_t_c0020_sr.tkaku_kva_cd IS 'コードマスタ 999204';
-COMMENT ON COLUMN eso_t_c0020_sr.tkaku_kva_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0020_sr.seizo_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0020_sr.seizo_nennomi_flg IS '0:年月を入力 1:年のみ入力';
-COMMENT ON COLUMN eso_t_c0020_sr.seizo_ym_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0020_sr.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
-
-COMMIT;
-
-
-BEGIN;
-
-COMMENT ON COLUMN eso_t_c0021_kometer.okyaku_id IS '場所ID';
-COMMENT ON COLUMN eso_t_c0021_kometer.zumen_id IS '設備が配置されている図面ID';
-COMMENT ON COLUMN eso_t_c0021_kometer.setsubi_id IS '図面上の設備を識別するID 配置後は値が変更されない';
-COMMENT ON COLUMN eso_t_c0021_kometer.kotai_id IS '設備の個体を識別するID 設備更新で値が変更される';
-COMMENT ON COLUMN eso_t_c0021_kometer.shinsetsu_flg IS 'リリース後の設備状態フラグ 0:既設データ、1:新設データ';
-COMMENT ON COLUMN eso_t_c0021_kometer.genba_kakuninzumi_meibanto_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.meter_shurui IS 'コードマスタ 580001';
-COMMENT ON COLUMN eso_t_c0021_kometer.haisen_hoshiki IS 'コードマスタ 580003';
-COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_v IS 'コードマスタ 580004';
-COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_v_cd IS 'コードマスタ 999001 V固定';
-COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_a IS 'コードマスタ 580005';
-COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_a_cd IS 'コードマスタ 999002 A固定';
-COMMENT ON COLUMN eso_t_c0021_kometer.meter_yuko_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0021_kometer.meter_yuko_ym_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.ct_yuko_ym IS '西暦年月';
-COMMENT ON COLUMN eso_t_c0021_kometer.ct_yuko_ym_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.seizosha_cd IS '製造者マスタ';
-COMMENT ON COLUMN eso_t_c0021_kometer.seizosha_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_gaitonashi_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_kakuninkonnan_flg IS '0:チェック無 1:チェック有';
-COMMENT ON COLUMN eso_t_c0021_kometer.shinki_koushin_sakujo_flg IS '0:新規 1:更新 2:削除';
+COMMENT ON COLUMN eso_t_c0021_kometer.okyaku_id IS 'お客さまID';
+COMMENT ON COLUMN eso_t_c0021_kometer.zumen_id IS '図面ID';
+COMMENT ON COLUMN eso_t_c0021_kometer.setsubi_id IS '設備ID';
+COMMENT ON COLUMN eso_t_c0021_kometer.kotai_id IS '個体ID';
+COMMENT ON COLUMN eso_t_c0021_kometer.daisu_renban IS '台数連番';
+COMMENT ON COLUMN eso_t_c0021_kometer.shinsetsu_flg IS '新設フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.genba_kakuninzumi_meibanto_flg IS '現場確認済（銘板等）フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.kairo_nm IS '回路名';
+COMMENT ON COLUMN eso_t_c0021_kometer.meter_shurui IS 'メーター種類';
+COMMENT ON COLUMN eso_t_c0021_kometer.haisen_hoshiki IS '配線方式';
+COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_v IS '定格電圧';
+COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_v_cd IS '定格電圧単位';
+COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_a IS '定格電流';
+COMMENT ON COLUMN eso_t_c0021_kometer.tkaku_a_cd IS '定格電流単位';
+COMMENT ON COLUMN eso_t_c0021_kometer.meter_yuko_ym IS 'メーター有効期限';
+COMMENT ON COLUMN eso_t_c0021_kometer.meter_yuko_ym_kakuninkonnan_flg IS 'メーター有効期限確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.ct_yuko_ym IS 'CT有効期限';
+COMMENT ON COLUMN eso_t_c0021_kometer.ct_yuko_ym_kakuninkonnan_flg IS 'CT有効期限確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.seizosha_cd IS '製造者CD';
+COMMENT ON COLUMN eso_t_c0021_kometer.seizosha_jiyunyuryoku IS '製造者自由入力';
+COMMENT ON COLUMN eso_t_c0021_kometer.seizosha_kakuninkonnan_flg IS '製造者確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_cd IS '型式CD';
+COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_gaitonashi_flg IS '型式該当無フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_jiyunyuryoku IS '型式自由入力';
+COMMENT ON COLUMN eso_t_c0021_kometer.katashiki_kakuninkonnan_flg IS '型式確認困難フラグ';
+COMMENT ON COLUMN eso_t_c0021_kometer.biko IS '備考';
+COMMENT ON COLUMN eso_t_c0021_kometer.ordr_jn IS '表示順';
+COMMENT ON COLUMN eso_t_c0021_kometer.create_date IS '作成日';
+COMMENT ON COLUMN eso_t_c0021_kometer.create_user IS '作成者';
+COMMENT ON COLUMN eso_t_c0021_kometer.record_date IS '更新日';
+COMMENT ON COLUMN eso_t_c0021_kometer.record_user IS '更新者';
+COMMENT ON COLUMN eso_t_c0021_kometer.shinki_koushin_sakujo_flg IS '新規・更新・削除フラグ';
 
 COMMIT;

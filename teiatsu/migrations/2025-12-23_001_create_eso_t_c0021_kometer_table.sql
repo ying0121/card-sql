@@ -29,12 +29,21 @@ CREATE TABLE IF NOT EXISTS eso_t_c0021_kometer (
     tkaku_a_cd                     CHARACTER(2) DEFAULT '12',
 
     meter_yuko_ym                  CHARACTER(6),
+    meter_yuko_ym_kakuninkonnan_flg INTEGER DEFAULT 0,
 
     ct_yuko_ym                     CHARACTER(6),
+    ct_yuko_ym_kakuninkonnan_flg    INTEGER DEFAULT 0,
 
     seizosha_cd                    CHARACTER(4),
+    seizosha_jiyunyuryoku          VARCHAR(32),
+    seizosha_kakuninkonnan_flg     INTEGER DEFAULT 0,
 
     katashiki_cd                   CHARACTER(4),
+    katashiki_gaitonashi_flg       INTEGER DEFAULT 0,
+    katashiki_jiyunyuryoku         VARCHAR(32),
+    katashiki_kakuninkonnan_flg    INTEGER DEFAULT 0,
+
+    biko                           VARCHAR(256),
 
     ordr_jn                        INTEGER,
 

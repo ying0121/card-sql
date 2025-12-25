@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0016_ct (
 
     kantsu_su                       NUMERIC(2),
 
+    biko                            VARCHAR(256),
+
     ordr_jn                         INTEGER,
 
     create_date                     TIMESTAMP(6) WITHOUT TIME ZONE,

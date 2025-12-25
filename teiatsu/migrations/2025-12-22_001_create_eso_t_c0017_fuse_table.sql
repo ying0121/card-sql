@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0017_fuse (
 
     fuse_su                         NUMERIC(2) DEFAULT 3,
 
+    biko                            VARCHAR(256),
+
     ordr_jn                         INTEGER,
 
     create_date                     TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT now(),

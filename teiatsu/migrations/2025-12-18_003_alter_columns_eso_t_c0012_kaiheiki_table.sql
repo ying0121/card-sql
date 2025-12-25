@@ -121,16 +121,28 @@ END $$;
 -- その他のフィールド変更
 -- ============================================
 
--- TKAKU_AMP (NUMERIC(6,2)) → tkaku_a (numeric(4, 2))
+-- TKAKU_AMP (NUMERIC(6,2)) → tkaku_a (numeric(6))
 DO $$
 BEGIN
     IF EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'eso_t_c0012_kaiheiki' 
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0012_kaiheiki'
         AND column_name = 'TKAKU_AMP'
     ) THEN
         ALTER TABLE eso_t_c0012_kaiheiki
             RENAME COLUMN TKAKU_AMP TO tkaku_a;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0012_kaiheiki'
+        AND column_name = 'tkaku_a'
+    ) THEN
+        ALTER TABLE eso_t_c0012_kaiheiki
+            ALTER COLUMN tkaku_a TYPE NUMERIC(6);
     END IF;
 END $$;
 

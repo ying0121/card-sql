@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0014_bundenban (
 
     waku_nm                         VARCHAR(40),
 
+    biko                            VARCHAR(256),
+
     ordr_jn                         INTEGER,
 
     create_date                     TIMESTAMP(6) WITHOUT TIME ZONE,

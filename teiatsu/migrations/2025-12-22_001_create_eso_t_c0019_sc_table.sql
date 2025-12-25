@@ -14,15 +14,21 @@ CREATE TABLE IF NOT EXISTS eso_t_c0019_sc (
 
     shinsetsu_flg                   INTEGER DEFAULT 1,
 
+    genba_kakuninzumi_meibanto_flg  INTEGER DEFAULT 0,
+
     tkaku_v                         NUMERIC(4, 2),
     tkaku_v_cd                      CHARACTER(2) DEFAULT '12',
 
     tkaku_kva                       NUMERIC(4, 2),
     tkaku_kva_cd                    CHARACTER(2) DEFAULT '12',
+    tkaku_kva_kakuninkonnan_flg     INTEGER DEFAULT 0,
 
     seizo_ym                        CHARACTER(6),
 
     seizo_nennomi_flg               INTEGER DEFAULT 0,
+    seizo_ym_kakuninkonnan_flg      INTEGER DEFAULT 0,
+
+    biko                            VARCHAR(256),
 
     ordr_jn                         INTEGER,
 

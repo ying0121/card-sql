@@ -251,7 +251,7 @@ BEGIN
     END IF;
 END $$;
 
--- KATASHIKI → katashiki_cd
+-- KATASHIKI (VARCHAR(32)) → katashiki_cd (character(4))
 DO $$
 BEGIN
     IF EXISTS (
@@ -261,6 +261,18 @@ BEGIN
     ) THEN
         ALTER TABLE eso_t_c0021_kometer
             RENAME COLUMN KATASHIKI TO katashiki_cd;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'eso_t_c0021_kometer'
+        AND column_name = 'katashiki_cd'
+    ) THEN
+        ALTER TABLE eso_t_c0021_kometer
+            ALTER COLUMN katashiki_cd TYPE CHARACTER(4);
     END IF;
 END $$;
 

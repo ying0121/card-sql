@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS eso_t_c0018_kansen (
 
     haisen_su                       NUMERIC(1),
 
+    biko                            VARCHAR(256),
+
     ordr_jn                         INTEGER,
 
     create_date                     TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT now(),

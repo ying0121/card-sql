@@ -1,7 +1,7 @@
 
--- 2025-12-19_004_create_indexes_eso_t_c0013_cable.sql
+-- 2025-12-18_004_create_indexes_eso_t_c0013_cable.sql
 -- 目的：低圧ケーブルテーブルにインデックスを作成
--- 作成日: 2025-12-19
+-- 作成日: 2025-12-18
 -- 作成者: 浦大輔
 -- 対象DB：PostgreSQL
 
