@@ -12,7 +12,11 @@ sql/
 │   ├── migrations/       # マイグレーションファイル
 │   ├── queries/          # DMLクエリファイル
 │   └── scripts/          # スクリプトファイル
-└── zumen_shisutemu/      # 図面・システム関連テーブルグループ
+├── zumen_shisutemu/      # 図面・システム関連テーブルグループ
+│   ├── migrations/
+│   ├── queries/
+│   └── scripts/
+└── masuta/               # マスタテーブルグループ
     ├── migrations/
     ├── queries/
     └── scripts/
@@ -141,6 +145,7 @@ END $$;
 
 - `teiatsu/migrations/2025-12-18_001_create_eso_t_c0011_keiki_table.sql`
 - `zumen_shisutemu/migrations/2025-12-24_003_alter_columns_eso_t_c0006_okyaku_work_table.sql`
+- `masuta/migrations/2025-12-26_001_create_eso_m_c0001_cdmast_table.sql`
 
 ---
 
@@ -153,7 +158,9 @@ END $$;
 - **INSERTクエリ**（`*_insert_*.sql`）- 新規レコードの挿入
 - **SELECTクエリ**（`*_select_*.sql`）- レコードの検索
 - **UPDATEクエリ**（`*_update_*.sql`）- レコードの更新
-- **DELETEクエリ**（`*_delete_*.sql`）- レコードの論理削除（`shinki_koushin_sakujo_flg = 2` に設定）
+- **DELETEクエリ**（`*_delete_*.sql`）- レコードの削除
+  - トランザクションテーブル（`teiatsu`, `zumen_shisutemu`）: 論理削除（`shinki_koushin_sakujo_flg = 2` に設定）
+  - マスタテーブル（`masuta`）: 物理削除（`DELETE`文を使用）
 
 ### 特徴
 
@@ -224,6 +231,7 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 
 - `teiatsu/queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql`
 - `zumen_shisutemu/queries/2025-12-24_select_eso_t_c0005_cad_link_table.sql`
+- `masuta/queries/2025-12-26_insert_eso_m_c0001_cdmast_table.sql`
 
 ---
 
@@ -267,6 +275,7 @@ YYYY-MM-DD_description.sql
 - `teiatsu/scripts/2025-12-23_example_views_usage.sql` - c0020, c0021
 - `zumen_shisutemu/scripts/2025-12-24_example_views_usage.sql` - c0005, c0006, c0007
 - `zumen_shisutemu/scripts/2025-12-25_example_views_usage.sql` - c0008, c0009
+- `masuta/scripts/2025-12-26_example_views_usage.sql` - c0001
 
 #### 2. `YYYY-MM-DD_example_functions_usage.sql` - テーブル操作の使用例
 
@@ -282,6 +291,7 @@ YYYY-MM-DD_description.sql
 - `teiatsu/scripts/2025-12-23_example_functions_usage.sql` - c0020, c0021
 - `zumen_shisutemu/scripts/2025-12-24_example_functions_usage.sql` - c0005, c0006, c0007
 - `zumen_shisutemu/scripts/2025-12-25_example_functions_usage.sql` - c0008, c0009
+- `masuta/scripts/2025-12-26_example_functions_usage.sql` - c0001
 
 #### 3. `common_table_definitions.sql` - テーブル定義確認クエリ（共通）
 
@@ -293,6 +303,7 @@ YYYY-MM-DD_description.sql
 
 - `teiatsu/scripts/2025-12-18_example_views_usage.sql`
 - `zumen_shisutemu/scripts/2025-12-24_example_functions_usage.sql`
+- `masuta/scripts/2025-12-26_example_functions_usage.sql`
 - `teiatsu/scripts/common_table_definitions.sql`
 
 ### 注意事項
@@ -379,6 +390,15 @@ YYYY-MM-DD_description.sql
    - 作成日: 2025-12-25
    - 主キー: `okyaku_id`, `yoto_kbn`
 
+### 📦 masuta（マスタテーブル）
+
+現在管理されているテーブル（1テーブル）：
+
+1. **eso_m_c0001_cdmast** - コードマスタテーブル
+   - 作成日: 2025-12-26
+   - 主キー: `daibunrui_cd`, `shobunrui_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
 ---
 
 ## ファイル命名規則
@@ -444,6 +464,7 @@ YYYY-MM-DD_description.sql
   - `1`: 更新
   - `2`: 削除（論理削除）
   - 論理削除されたレコードを除外する場合は `shinki_koushin_sakujo_flg IS DISTINCT FROM 2` を使用
+  - **注意**: マスタテーブル（`masuta`グループ）にはこのフィールドは含まれません
 
 ---
 
@@ -485,8 +506,12 @@ YYYY-MM-DD_description.sql
   - SQLインジェクション対策済み
 
 - **論理削除の考慮**
-  - SELECTクエリでは `shinki_koushin_sakujo_flg IS DISTINCT FROM 2` を使用
-  - DELETEクエリでは `shinki_koushin_sakujo_flg = 2` に設定
+  - トランザクションテーブル（`teiatsu`, `zumen_shisutemu`）:
+    - SELECTクエリでは `shinki_koushin_sakujo_flg IS DISTINCT FROM 2` を使用
+    - DELETEクエリでは `shinki_koushin_sakujo_flg = 2` に設定
+  - マスタテーブル（`masuta`）:
+    - 物理削除を使用（`DELETE`文）
+    - 論理削除フラグは使用しない
 
 - **RETURNING句の使用**
   - INSERT/UPDATE/DELETEクエリでは `RETURNING` 句を使用して結果を返す
@@ -506,7 +531,8 @@ YYYY-MM-DD_description.sql
 
 - **ビューの作成**
   - ビューは `CREATE OR REPLACE VIEW` を使用
-  - ビューは論理削除されていないレコードのみを返すように設計
+  - トランザクションテーブルのビューは論理削除されていないレコードのみを返すように設計（`shinki_koushin_sakujo_flg IS DISTINCT FROM 2`）
+  - マスタテーブルのビューは全レコードを返す
 
 ### 4. ファイルヘッダー
 
@@ -562,6 +588,9 @@ YYYY-MM-DD_description.sql
 
 ## 更新履歴
 
+- 2025-12-26: `masuta`フォルダを追加（マスタテーブルグループ）
+  - `eso_m_c0001_cdmast`（コードマスタテーブル）を追加
+  - マスタテーブルは論理削除フラグを使用しない
 - 2025-12-25: データ移行ロジックを `alter_columns` ファイルに追加
 - 2025-12-25: スクリプトファイルを日付ごとに分割
 - 2025-12-24: ファイルヘッダーを標準化（作成日、作成者、対象DB）
