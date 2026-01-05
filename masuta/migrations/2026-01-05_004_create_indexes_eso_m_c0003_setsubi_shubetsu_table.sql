@@ -7,10 +7,6 @@
 
 BEGIN;
 
--- zumen_nm にインデックスを作成（検索用）
-CREATE INDEX IF NOT EXISTS idx_eso_m_c0003_setsubi_shubetsu_zumen_nm
-    ON eso_m_c0003_setsubi_shubetsu (zumen_nm);
-
 -- shubetsu_nm にインデックスを作成（検索用）
 CREATE INDEX IF NOT EXISTS idx_eso_m_c0003_setsubi_shubetsu_shubetsu_nm
     ON eso_m_c0003_setsubi_shubetsu (shubetsu_nm);

@@ -10,21 +10,19 @@
 -- 2. 直接実行する場合：以下のPREPARE文を使用
 --
 -- PREPARE update_setsubi_shubetsu AS
--- UPDATE eso_m_c0003_setsubi_shubetsu SET zumen_nm = $3, shubetsu_nm = $4, table_nm = $5, 
---     record_date = now(), record_user = $6
--- WHERE zumen_cd = $1 AND shubetsu_cd = $2;
+-- UPDATE eso_m_c0003_setsubi_shubetsu SET shubetsu_nm = $2, table_nm = $3, 
+--     record_date = now(), record_user = $4
+-- WHERE shubetsu_cd = $1;
 --
--- EXECUTE update_setsubi_shubetsu(1, '0001', '更新図面名称', '更新種別名称', '更新テーブル名称', 'user002');
+-- EXECUTE update_setsubi_shubetsu('0001', '更新種別名称', '更新テーブル名称', 'user002');
 
 UPDATE eso_m_c0003_setsubi_shubetsu
 SET
-    zumen_nm    = $3,
-    shubetsu_nm = $4,
-    table_nm    = $5,
+    shubetsu_nm = $2,
+    table_nm    = $3,
     record_date = now(),
-    record_user = $6
+    record_user = $4
 WHERE
-    zumen_cd = $1
-AND shubetsu_cd = $2
+    shubetsu_cd = $1
 RETURNING *;
 

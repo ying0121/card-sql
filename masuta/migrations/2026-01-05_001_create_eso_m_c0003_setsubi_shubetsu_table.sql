@@ -6,9 +6,6 @@
 -- 対象DB：PostgreSQL
 
 CREATE TABLE IF NOT EXISTS eso_m_c0003_setsubi_shubetsu (
-    zumen_cd                          INTEGER NOT NULL,
-    zumen_nm                          CHARACTER VARYING(24) NOT NULL,
-    
     shubetsu_cd                       CHARACTER(4) NOT NULL,
     shubetsu_nm                       CHARACTER VARYING(32) NOT NULL,
     table_nm                          CHARACTER VARYING(64),
@@ -20,7 +17,6 @@ CREATE TABLE IF NOT EXISTS eso_m_c0003_setsubi_shubetsu (
     record_user                       CHARACTER VARYING(100) NOT NULL,
     
     CONSTRAINT pk_eso_m_c0003_setsubi_shubetsu PRIMARY KEY (
-        zumen_cd,
         shubetsu_cd
     )
 );

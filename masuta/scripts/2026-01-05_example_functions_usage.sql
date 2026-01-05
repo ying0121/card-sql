@@ -61,8 +61,6 @@ COMMIT;
 -- 注意：実際のアプリケーションでは、queries/2026-01-05_insert_eso_m_c0003_setsubi_shubetsu_table.sql を使用してください
 BEGIN;
 INSERT INTO eso_m_c0003_setsubi_shubetsu (
-    zumen_cd,
-    zumen_nm,
     shubetsu_cd,
     shubetsu_nm,
     table_nm,
@@ -70,8 +68,6 @@ INSERT INTO eso_m_c0003_setsubi_shubetsu (
     record_user
 )
 VALUES (
-    1,
-    '図面名称１',
     '0001',
     '種別名称１',
     'table_name_1',
@@ -85,14 +81,12 @@ COMMIT;
 BEGIN;
 UPDATE eso_m_c0003_setsubi_shubetsu
 SET
-    zumen_nm    = '更新図面名称',
     shubetsu_nm = '更新種別名称',
     table_nm    = '更新テーブル名称',
     record_date = now(),
     record_user = 'user002'
 WHERE
-    zumen_cd = 1
-AND shubetsu_cd = '0001';
+    shubetsu_cd = '0001';
 COMMIT;
 
 -- DELETE操作の使用例
@@ -100,8 +94,7 @@ COMMIT;
 BEGIN;
 DELETE FROM eso_m_c0003_setsubi_shubetsu
 WHERE
-    zumen_cd = 1
-AND shubetsu_cd = '0001';
+    shubetsu_cd = '0001';
 COMMIT;
 
 -- ============================================
@@ -225,19 +218,13 @@ SELECT * FROM eso_m_c0002_zumen_shubetsu WHERE zumen_nm LIKE '%図面%' ORDER BY
 
 -- 設備種別マスタテーブル
 -- 全件取得
-SELECT * FROM eso_m_c0003_setsubi_shubetsu ORDER BY zumen_cd, shubetsu_cd;
-
--- 図面コードで検索
-SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE zumen_cd = 1 ORDER BY shubetsu_cd;
+SELECT * FROM eso_m_c0003_setsubi_shubetsu ORDER BY shubetsu_cd;
 
 -- 種別コードで検索
-SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_cd = '0001' ORDER BY zumen_cd;
-
--- 図面名称で検索
-SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE zumen_nm LIKE '%図面%' ORDER BY zumen_cd, shubetsu_cd;
+SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_cd = '0001';
 
 -- 種別名称で検索
-SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_nm LIKE '%種別%' ORDER BY zumen_cd, shubetsu_cd;
+SELECT * FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_nm LIKE '%種別%' ORDER BY shubetsu_cd;
 
 -- 設備シンボルマスタテーブル
 -- 全件取得

@@ -29,8 +29,6 @@ COMMIT;
 BEGIN;
 CREATE OR REPLACE VIEW v_eso_m_c0003_setsubi_shubetsu AS
 SELECT
-    zumen_cd,
-    zumen_nm,
     shubetsu_cd,
     shubetsu_nm,
     table_nm,
@@ -39,7 +37,7 @@ SELECT
     record_date,
     record_user
 FROM eso_m_c0003_setsubi_shubetsu
-ORDER BY zumen_cd, shubetsu_cd;
+ORDER BY shubetsu_cd;
 COMMIT;
 
 -- 3. 設備シンボルマスタテーブルの使用例
@@ -98,12 +96,6 @@ BEGIN;
 SELECT 'eso_m_c0003_setsubi_shubetsu' AS table_name, COUNT(*) AS record_count
 FROM eso_m_c0003_setsubi_shubetsu;
 COMMIT;
-
--- 図面コードごとのレコード数
-SELECT zumen_cd, COUNT(*) AS record_count
-FROM eso_m_c0003_setsubi_shubetsu
-GROUP BY zumen_cd
-ORDER BY zumen_cd;
 
 -- 種別コードごとのレコード数
 SELECT shubetsu_cd, COUNT(*) AS record_count

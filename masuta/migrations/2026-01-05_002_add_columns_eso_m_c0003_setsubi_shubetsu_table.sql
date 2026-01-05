@@ -15,13 +15,5 @@ ALTER TABLE eso_m_c0003_setsubi_shubetsu
 ALTER TABLE eso_m_c0003_setsubi_shubetsu
     ADD COLUMN IF NOT EXISTS create_user CHARACTER VARYING(100) NOT NULL DEFAULT 'ikou2027';
 
--- record_date を追加
-ALTER TABLE eso_m_c0003_setsubi_shubetsu
-    ADD COLUMN IF NOT EXISTS record_date TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT now();
-
--- record_user を追加
-ALTER TABLE eso_m_c0003_setsubi_shubetsu
-    ADD COLUMN IF NOT EXISTS record_user CHARACTER VARYING(100) NOT NULL DEFAULT 'ikou2027';
-
 COMMIT;
 

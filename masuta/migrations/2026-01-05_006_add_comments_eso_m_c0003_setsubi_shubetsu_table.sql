@@ -9,8 +9,6 @@ BEGIN;
 
 COMMENT ON TABLE eso_m_c0003_setsubi_shubetsu IS '設備種別マスタテーブル';
 
-COMMENT ON COLUMN eso_m_c0003_setsubi_shubetsu.zumen_cd IS '図面コード';
-COMMENT ON COLUMN eso_m_c0003_setsubi_shubetsu.zumen_nm IS '図面名称';
 COMMENT ON COLUMN eso_m_c0003_setsubi_shubetsu.shubetsu_cd IS '種別コード';
 COMMENT ON COLUMN eso_m_c0003_setsubi_shubetsu.shubetsu_nm IS '種別名称';
 COMMENT ON COLUMN eso_m_c0003_setsubi_shubetsu.table_nm IS 'テーブル名称';

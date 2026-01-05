@@ -10,13 +10,11 @@
 -- 2. 直接実行する場合：以下のPREPARE文を使用
 --
 -- PREPARE select_setsubi_shubetsu AS
--- SELECT ... FROM eso_m_c0003_setsubi_shubetsu WHERE zumen_cd = $1 AND shubetsu_cd = $2;
+-- SELECT ... FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_cd = $1;
 --
--- EXECUTE select_setsubi_shubetsu(1, '0001');
+-- EXECUTE select_setsubi_shubetsu('0001');
 
 SELECT
-    zumen_cd,
-    zumen_nm,
     shubetsu_cd,
     shubetsu_nm,
     table_nm,
@@ -26,6 +24,5 @@ SELECT
     record_user
 FROM eso_m_c0003_setsubi_shubetsu
 WHERE
-    zumen_cd = $1
-AND shubetsu_cd = $2;
+    shubetsu_cd = $1;
 

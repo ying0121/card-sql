@@ -11,14 +11,12 @@
 --
 -- PREPARE insert_setsubi_shubetsu AS
 -- INSERT INTO eso_m_c0003_setsubi_shubetsu (
---     zumen_cd, zumen_nm, shubetsu_cd, shubetsu_nm, table_nm, create_user, record_user
--- ) VALUES ($1, $2, $3, $4, $5, $6, $7);
+--     shubetsu_cd, shubetsu_nm, table_nm, create_user, record_user
+-- ) VALUES ($1, $2, $3, $4, $5);
 --
--- EXECUTE insert_setsubi_shubetsu(1, '図面名称', '0001', '種別名称', 'table_name', 'user001', 'user001');
+-- EXECUTE insert_setsubi_shubetsu('0001', '種別名称', 'table_name', 'user001', 'user001');
 
 INSERT INTO eso_m_c0003_setsubi_shubetsu (
-    zumen_cd,
-    zumen_nm,
     shubetsu_cd,
     shubetsu_nm,
     table_nm,
@@ -26,13 +24,11 @@ INSERT INTO eso_m_c0003_setsubi_shubetsu (
     record_user
 )
 VALUES (
-    $1,  -- zumen_cd
-    $2,  -- zumen_nm
-    $3,  -- shubetsu_cd
-    $4,  -- shubetsu_nm
-    $5,  -- table_nm
-    $6,  -- create_user
-    $7   -- record_user
+    $1,  -- shubetsu_cd
+    $2,  -- shubetsu_nm
+    $3,  -- table_nm
+    $4,  -- create_user
+    $5   -- record_user
 )
 RETURNING *;
 

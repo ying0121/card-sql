@@ -10,13 +10,12 @@
 -- 2. 直接実行する場合：以下のPREPARE文を使用
 --
 -- PREPARE delete_setsubi_shubetsu AS
--- DELETE FROM eso_m_c0003_setsubi_shubetsu WHERE zumen_cd = $1 AND shubetsu_cd = $2;
+-- DELETE FROM eso_m_c0003_setsubi_shubetsu WHERE shubetsu_cd = $1;
 --
--- EXECUTE delete_setsubi_shubetsu(1, '0001');
+-- EXECUTE delete_setsubi_shubetsu('0001');
 
 DELETE FROM eso_m_c0003_setsubi_shubetsu
 WHERE
-    zumen_cd = $1
-AND shubetsu_cd = $2
+    shubetsu_cd = $1
 RETURNING *;
 
