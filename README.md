@@ -276,6 +276,7 @@ YYYY-MM-DD_description.sql
 - `zumen_shisutemu/scripts/2025-12-24_example_views_usage.sql` - c0005, c0006, c0007
 - `zumen_shisutemu/scripts/2025-12-25_example_views_usage.sql` - c0008, c0009
 - `masuta/scripts/2025-12-26_example_views_usage.sql` - c0001
+- `masuta/scripts/2026-01-05_example_views_usage.sql` - c0002, c0003, c0004
 
 #### 2. `YYYY-MM-DD_example_functions_usage.sql` - テーブル操作の使用例
 
@@ -292,6 +293,7 @@ YYYY-MM-DD_description.sql
 - `zumen_shisutemu/scripts/2025-12-24_example_functions_usage.sql` - c0005, c0006, c0007
 - `zumen_shisutemu/scripts/2025-12-25_example_functions_usage.sql` - c0008, c0009
 - `masuta/scripts/2025-12-26_example_functions_usage.sql` - c0001
+- `masuta/scripts/2026-01-05_example_functions_usage.sql` - c0002, c0003, c0004
 
 #### 3. `common_table_definitions.sql` - テーブル定義確認クエリ（共通）
 
@@ -304,6 +306,7 @@ YYYY-MM-DD_description.sql
 - `teiatsu/scripts/2025-12-18_example_views_usage.sql`
 - `zumen_shisutemu/scripts/2025-12-24_example_functions_usage.sql`
 - `masuta/scripts/2025-12-26_example_functions_usage.sql`
+- `masuta/scripts/2026-01-05_example_functions_usage.sql`
 - `teiatsu/scripts/common_table_definitions.sql`
 
 ### 注意事項
@@ -392,11 +395,26 @@ YYYY-MM-DD_description.sql
 
 ### 📦 masuta（マスタテーブル）
 
-現在管理されているテーブル（1テーブル）：
+現在管理されているテーブル（4テーブル）：
 
 1. **eso_m_c0001_cdmast** - コードマスタテーブル
    - 作成日: 2025-12-26
    - 主キー: `daibunrui_cd`, `shobunrui_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+2. **eso_m_c0002_zumen_shubetsu** - 図面種別マスタテーブル
+   - 作成日: 2026-01-05
+   - 主キー: `zumen_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+3. **eso_m_c0003_setsubi_shubetsu** - 設備種別マスタテーブル
+   - 作成日: 2026-01-05
+   - 主キー: `zumen_cd`, `shubetsu_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+4. **eso_m_c0004_setsubi_symbol** - 設備シンボルマスタテーブル
+   - 作成日: 2026-01-05
+   - 主キー: `shubetsu_cd`, `symbol_no`
    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
 
 ---
