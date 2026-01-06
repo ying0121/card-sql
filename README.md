@@ -61,7 +61,7 @@ sql/
      - 現行システムで値が設定されている場合：現行の値をそのまま移行（「システム」も維持）
      - 値が未設定の場合：
        - 作成者・更新者を `'ikou2027'` に設定
-       - 作成日・更新日を「データ移行日」（各ファイルの日付）に設定
+       - 作成日・更新日をマイグレーション実行時の現在日時に設定
    - すべての操作は `DO $$ ... IF EXISTS ... END $$;` ブロックで囲まれ、冪等性を保証
    - デフォルト値の設定は、カラム名変更とタイプ変更の後に実行される
    - デフォルト値を削除する場合は `ALTER COLUMN ... DROP DEFAULT` を使用
@@ -107,7 +107,7 @@ YYYY-MM-DD_NNN_operation_table_name.sql
 
 2. **値が未設定の場合**：
    - 作成者・更新者を `'ikou2027'` に設定
-   - 作成日・更新日を「データ移行日」（各ファイルの日付）に設定
+   - 作成日・更新日をマイグレーション実行時の現在日時に設定
 
 **実装例：**
 ```sql
@@ -116,7 +116,7 @@ YYYY-MM-DD_NNN_operation_table_name.sql
 -- ============================================
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-18 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     UPDATE eso_t_c0011_keiki
@@ -146,6 +146,7 @@ END $$;
 - `teiatsu/migrations/2025-12-18_001_create_eso_t_c0011_keiki_table.sql`
 - `zumen_shisutemu/migrations/2025-12-24_003_alter_columns_eso_t_c0006_okyaku_work_table.sql`
 - `masuta/migrations/2025-12-26_001_create_eso_m_c0001_cdmast_table.sql`
+- `masuta/migrations/2026-01-06_001_create_eso_m_c0005_hden_ptn_table.sql`
 
 ---
 
@@ -232,6 +233,7 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 - `teiatsu/queries/2025-12-18_insert_eso_t_c0011_keiki_table.sql`
 - `zumen_shisutemu/queries/2025-12-24_select_eso_t_c0005_cad_link_table.sql`
 - `masuta/queries/2025-12-26_insert_eso_m_c0001_cdmast_table.sql`
+- `masuta/queries/2026-01-06_insert_eso_m_c0005_hden_ptn_table.sql`
 
 ---
 
@@ -277,6 +279,7 @@ YYYY-MM-DD_description.sql
 - `zumen_shisutemu/scripts/2025-12-25_example_views_usage.sql` - c0008, c0009
 - `masuta/scripts/2025-12-26_example_views_usage.sql` - c0001
 - `masuta/scripts/2026-01-05_example_views_usage.sql` - c0002, c0003, c0004
+- `masuta/scripts/2026-01-06_example_views_usage.sql` - c0005, c0006, c0007
 
 #### 2. `YYYY-MM-DD_example_functions_usage.sql` - テーブル操作の使用例
 
@@ -294,6 +297,7 @@ YYYY-MM-DD_description.sql
 - `zumen_shisutemu/scripts/2025-12-25_example_functions_usage.sql` - c0008, c0009
 - `masuta/scripts/2025-12-26_example_functions_usage.sql` - c0001
 - `masuta/scripts/2026-01-05_example_functions_usage.sql` - c0002, c0003, c0004
+- `masuta/scripts/2026-01-06_example_functions_usage.sql` - c0005, c0006, c0007
 
 #### 3. `common_table_definitions.sql` - テーブル定義確認クエリ（共通）
 
@@ -307,6 +311,7 @@ YYYY-MM-DD_description.sql
 - `zumen_shisutemu/scripts/2025-12-24_example_functions_usage.sql`
 - `masuta/scripts/2025-12-26_example_functions_usage.sql`
 - `masuta/scripts/2026-01-05_example_functions_usage.sql`
+- `masuta/scripts/2026-01-06_example_functions_usage.sql`
 - `teiatsu/scripts/common_table_definitions.sql`
 
 ### 注意事項
@@ -395,7 +400,7 @@ YYYY-MM-DD_description.sql
 
 ### 📦 masuta（マスタテーブル）
 
-現在管理されているテーブル（4テーブル）：
+現在管理されているテーブル（7テーブル）：
 
 1. **eso_m_c0001_cdmast** - コードマスタテーブル
    - 作成日: 2025-12-26
@@ -415,6 +420,21 @@ YYYY-MM-DD_description.sql
 4. **eso_m_c0004_setsubi_symbol** - 設備シンボルマスタテーブル
    - 作成日: 2026-01-05
    - 主キー: `shubetsu_cd`, `symbol_no`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+5. **eso_m_c0005_hden_ptn** - 発電所パターンマスタテーブル
+   - 作成日: 2026-01-06
+   - 主キー: `yobihatsu_hden_kbn_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+6. **eso_m_c0006_category** - カテゴリマスタテーブル
+   - 作成日: 2026-01-06
+   - 主キー: `category_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+7. **eso_m_c0007_ssym_category** - セットシンボルカテゴリマスタテーブル
+   - 作成日: 2026-01-06
+   - 主キー: `category1_cd`, `category2_cd`, `category3_cd`
    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
 
 ---
@@ -589,7 +609,7 @@ YYYY-MM-DD_description.sql
 
 2. **値が未設定の場合**
    - 作成者・更新者を `'ikou2027'` に設定
-   - 作成日・更新日を「データ移行日」に設定
+   - 作成日・更新日をマイグレーション実行時の現在日時に設定
 
 このロジックは、`003_alter_columns_*.sql` ファイルに実装されています。
 
@@ -606,6 +626,11 @@ YYYY-MM-DD_description.sql
 
 ## 更新履歴
 
+- 2026-01-06: `masuta`フォルダに3つの新規テーブルを追加
+  - `eso_m_c0005_hden_ptn`（発電所パターンマスタテーブル）
+  - `eso_m_c0006_category`（カテゴリマスタテーブル）
+  - `eso_m_c0007_ssym_category`（セットシンボルカテゴリマスタテーブル）
+- 2026-01-06: データ移行ロジックの`migration_date`を固定日付から`now()`に変更
 - 2025-12-26: `masuta`フォルダを追加（マスタテーブルグループ）
   - `eso_m_c0001_cdmast`（コードマスタテーブル）を追加
   - マスタテーブルは論理削除フラグを使用しない

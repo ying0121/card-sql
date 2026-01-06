@@ -427,7 +427,7 @@ END $$;
 -- ============================================
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2026-01-05 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     UPDATE eso_m_c0004_setsubi_symbol

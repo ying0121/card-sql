@@ -426,7 +426,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-18 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -705,7 +705,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-18 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -869,7 +869,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-18 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -1312,7 +1312,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-19 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -1477,7 +1477,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-19 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -1772,7 +1772,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-19 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -2260,7 +2260,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-22 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -2438,7 +2438,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-22 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -2730,7 +2730,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-22 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -3263,7 +3263,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-23 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定
@@ -3583,7 +3583,7 @@ END $$;
 -- 2. 値が未設定の場合：作成者・更新者を 'ikou2027' に、作成日・更新日を「データ移行日」に設定
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-23 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     -- 値が未設定の場合のデフォルト設定

@@ -214,7 +214,7 @@ END $$;
 -- ============================================
 DO $$
 DECLARE
-    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := '2025-12-26 00:00:00'::timestamp;
+    migration_date TIMESTAMP(6) WITHOUT TIME ZONE := now();
     migration_user VARCHAR(100) := 'ikou2027';
 BEGIN
     UPDATE eso_m_c0001_cdmast
