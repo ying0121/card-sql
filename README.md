@@ -147,6 +147,11 @@ END $$;
 - `zumen_shisutemu/migrations/2025-12-24_003_alter_columns_eso_t_c0006_okyaku_work_table.sql`
 - `masuta/migrations/2025-12-26_001_create_eso_m_c0001_cdmast_table.sql`
 - `masuta/migrations/2026-01-06_001_create_eso_m_c0005_hden_ptn_table.sql`
+- `masuta/migrations/2026-01-08_001_create_eso_m_c0010_symbol_table.sql`
+- `masuta/migrations/2026-01-09_001_create_eso_m_c0012_tekkyo_table.sql`
+- `masuta/migrations/2026-01-09_001_create_eso_m_c0014_seizosha_table.sql`
+- `masuta/migrations/2026-01-09_001_create_eso_m_c0015_katashiki_table.sql`
+- `masuta/migrations/2026-01-09_001_create_eso_m_c0016_help_table.sql`
 
 ---
 
@@ -234,6 +239,11 @@ EXECUTE insert_keiki('1234567890', 12345678, 1, 1, 1, 1, '01', 99.99, '01', 50.0
 - `zumen_shisutemu/queries/2025-12-24_select_eso_t_c0005_cad_link_table.sql`
 - `masuta/queries/2025-12-26_insert_eso_m_c0001_cdmast_table.sql`
 - `masuta/queries/2026-01-06_insert_eso_m_c0005_hden_ptn_table.sql`
+- `masuta/queries/2026-01-08_insert_eso_m_c0010_symbol_table.sql`
+- `masuta/queries/2026-01-09_insert_eso_m_c0012_tekkyo_table.sql`
+- `masuta/queries/2026-01-09_insert_eso_m_c0014_seizosha_table.sql`
+- `masuta/queries/2026-01-09_insert_eso_m_c0015_katashiki_table.sql`
+- `masuta/queries/2026-01-09_insert_eso_m_c0016_help_table.sql`
 
 ---
 
@@ -280,6 +290,9 @@ YYYY-MM-DD_description.sql
 - `masuta/scripts/2025-12-26_example_views_usage.sql` - c0001
 - `masuta/scripts/2026-01-05_example_views_usage.sql` - c0002, c0003, c0004
 - `masuta/scripts/2026-01-06_example_views_usage.sql` - c0005, c0006, c0007
+- `masuta/scripts/2026-01-07_example_views_usage.sql` - c0008, c0009
+- `masuta/scripts/2026-01-08_example_views_usage.sql` - c0010, c0011
+- `masuta/scripts/2026-01-09_example_views_usage.sql` - c0012, c0014, c0015, c0016
 
 #### 2. `YYYY-MM-DD_example_functions_usage.sql` - テーブル操作の使用例
 
@@ -298,6 +311,10 @@ YYYY-MM-DD_description.sql
 - `masuta/scripts/2025-12-26_example_functions_usage.sql` - c0001
 - `masuta/scripts/2026-01-05_example_functions_usage.sql` - c0002, c0003, c0004
 - `masuta/scripts/2026-01-06_example_functions_usage.sql` - c0005, c0006, c0007
+- `masuta/scripts/2026-01-09_example_functions_usage.sql` - c0012, c0014, c0015, c0016
+- `masuta/scripts/2026-01-07_example_functions_usage.sql` - c0008, c0009
+- `masuta/scripts/2026-01-08_example_functions_usage.sql` - c0010, c0011
+- `masuta/scripts/2026-01-09_example_functions_usage.sql` - c0012
 
 #### 3. `common_table_definitions.sql` - テーブル定義確認クエリ（共通）
 
@@ -312,6 +329,9 @@ YYYY-MM-DD_description.sql
 - `masuta/scripts/2025-12-26_example_functions_usage.sql`
 - `masuta/scripts/2026-01-05_example_functions_usage.sql`
 - `masuta/scripts/2026-01-06_example_functions_usage.sql`
+- `masuta/scripts/2026-01-07_example_functions_usage.sql`
+- `masuta/scripts/2026-01-08_example_functions_usage.sql`
+- `masuta/scripts/2026-01-09_example_functions_usage.sql`
 - `teiatsu/scripts/common_table_definitions.sql`
 
 ### 注意事項
@@ -400,7 +420,7 @@ YYYY-MM-DD_description.sql
 
 ### 📦 masuta（マスタテーブル）
 
-現在管理されているテーブル（7テーブル）：
+現在管理されているテーブル（15テーブル）：
 
 1. **eso_m_c0001_cdmast** - コードマスタテーブル
    - 作成日: 2025-12-26
@@ -436,6 +456,46 @@ YYYY-MM-DD_description.sql
    - 作成日: 2026-01-06
    - 主キー: `category1_cd`, `category2_cd`, `category3_cd`
    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+8. **eso_m_c0008_ptn_category** - 図面パターンカテゴリマスタテーブル
+   - 作成日: 2026-01-07
+   - 主キー: `category1_cd`, `category2_cd`, `category3_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+9. **eso_m_c0009_setsubi_category** - 設備カテゴリマスタテーブル
+   - 作成日: 2026-01-07
+   - 主キー: `category_cd`, `shubetsu_cd`
+   - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+10. **eso_m_c0010_symbol** - シンボルマスタテーブル
+    - 作成日: 2026-01-08
+    - 主キー: `symbol_id`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+11. **eso_m_c0011_jotai** - 機器使用状態マスタテーブル
+    - 作成日: 2026-01-08
+    - 主キー: `jotai_flg`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+12. **eso_m_c0012_tekkyo** - 撤去状態マスタテーブル
+    - 作成日: 2026-01-09
+    - 主キー: `jotai_flg`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+13. **eso_m_c0014_seizosha** - 製造者マスタテーブル
+    - 作成日: 2026-01-09
+    - 主キー: `shubetsu_cd`, `shurui_cd`, `seizosha_cd`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+14. **eso_m_c0015_katashiki** - 型式マスタテーブル
+    - 作成日: 2026-01-09
+    - 主キー: `shubetsu_cd`, `shurui_cd`, `seizosha_cd`, `katashiki_cd`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
+
+15. **eso_m_c0016_help** - 設備管理ヘルプマスタテーブル
+    - 作成日: 2026-01-09
+    - 主キー: `help_id`
+    - 注意: マスタテーブルのため、`shinki_koushin_sakujo_flg`（論理削除フラグ）は含まれません
 
 ---
 
@@ -626,6 +686,17 @@ YYYY-MM-DD_description.sql
 
 ## 更新履歴
 
+- 2026-01-09: `masuta`フォルダに4つの新規テーブルを追加
+  - `eso_m_c0012_tekkyo`（撤去状態マスタテーブル）
+  - `eso_m_c0014_seizosha`（製造者マスタテーブル）
+  - `eso_m_c0015_katashiki`（型式マスタテーブル）
+  - `eso_m_c0016_help`（設備管理ヘルプマスタテーブル）
+- 2026-01-08: `masuta`フォルダに2つの新規テーブルを追加
+  - `eso_m_c0010_symbol`（シンボルマスタテーブル）
+  - `eso_m_c0011_jotai`（機器使用状態マスタテーブル）
+- 2026-01-07: `masuta`フォルダに2つの新規テーブルを追加
+  - `eso_m_c0008_ptn_category`（図面パターンカテゴリマスタテーブル）
+  - `eso_m_c0009_setsubi_category`（設備カテゴリマスタテーブル）
 - 2026-01-06: `masuta`フォルダに3つの新規テーブルを追加
   - `eso_m_c0005_hden_ptn`（発電所パターンマスタテーブル）
   - `eso_m_c0006_category`（カテゴリマスタテーブル）
