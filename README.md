@@ -11,7 +11,8 @@ sql/
 ├── teiatsu/              # 低圧関連テーブルグループ
 │   ├── migrations/       # マイグレーションファイル
 │   ├── queries/          # DMLクエリファイル
-│   └── scripts/          # スクリプトファイル
+│   ├── scripts/          # スクリプトファイル
+│   └── stores/           # データ移行ストアドプロシージャ
 ├── zumen_shisutemu/      # 図面・システム関連テーブルグループ
 │   ├── migrations/
 │   ├── queries/
@@ -22,7 +23,7 @@ sql/
     └── scripts/
 ```
 
-各テーブルグループフォルダ内には、以下の3つのサブフォルダがあります：
+各テーブルグループフォルダ内には、以下のサブフォルダがあります：
 
 ---
 
@@ -344,6 +345,118 @@ YYYY-MM-DD_description.sql
 
 ---
 
+## 📁 {table_group}/stores/
+
+データ移行用のストアドプロシージャ（PostgreSQL関数）を格納します。
+
+### 用途
+
+- 既存システム（ESI_T_K*）から新システム（eso_t_*）へのデータ移行
+- バッチ処理による大量データの移行
+- 移行統計情報（成功件数、エラー件数等）の取得
+
+### ストアドプロシージャの特徴
+
+- **関数名**: `migrate_{table_name}()` 形式（例：`migrate_c0011_keiki()`）
+- **戻り値**: 移行統計情報を返すテーブル
+  - `total_cnt`: 総レコード数
+  - `success_cnt`: 成功件数
+  - `skip_cnt`: スキップ件数
+  - `error_cnt`: エラー件数
+- **エラーハンドリング**: 各レコードの移行エラーを `migrate_log` テーブルに記録
+- **ログ出力**: 移行開始・終了時にログを出力
+
+### データ変換ロジック
+
+各ストアドプロシージャには以下のデータ変換ロジックが含まれています：
+
+1. **作成者・作成日の変換**
+   - `create_user = 'システム'` または `NULL` の場合 → `'ikou2027'` に変換
+   - `create_date` が未設定の場合 → 現在日時に設定
+   - それ以外は元の値をそのまま使用
+
+2. **更新者・更新日の変換**
+   - `update_user = 'システム'` の場合 → `'ikou2027'` に変換
+   - `update_user` が `NULL` の場合 → `NULL` のまま
+   - `update_date` が未設定の場合 → `NULL` のまま
+   - それ以外は元の値をそのまま使用
+
+### 命名規則
+
+```
+{table_name}.sql
+```
+
+- `table_name`: 移行先テーブル名（例：`eso_t_c0011_keiki.sql`）
+
+### 使用方法
+
+#### 1. ストアドプロシージャの作成
+
+```sql
+-- ファイルを読み込んで実行
+\i teiatsu/stores/eso_t_c0011_keiki.sql
+```
+
+#### 2. 移行の実行
+
+```sql
+-- 移行を実行して統計情報を取得
+SELECT * FROM migrate_c0011_keiki();
+```
+
+**実行結果の例：**
+```
+ total_cnt | success_cnt | skip_cnt | error_cnt
+-----------+-------------+----------+-----------
+      1000 |         995 |        0 |         5
+```
+
+#### 3. エラーログの確認
+
+```sql
+-- 移行エラーを確認
+SELECT * FROM migrate_log 
+WHERE to_table_nm = 'eso_t_c0011_keiki' 
+ORDER BY txn_timestamp DESC;
+```
+
+### 移行元テーブル
+
+各ストアドプロシージャは、以下の命名規則に従った移行元テーブルからデータを取得します：
+
+- `ESI_T_K101_CT_KEIKI` → `eso_t_c0011_keiki`
+- `ESI_T_K102_CT_KAIHEIKI` → `eso_t_c0012_kaiheiki`
+- `ESI_T_K103_CT_CABLE` → `eso_t_c0013_cable`
+- `ESI_T_K104_CT_BUNDENBAN` → `eso_t_c0014_bundenban`
+- `ESI_T_K105_CT_KEIDENKI` → `eso_t_c0015_keidenki`
+
+### ファイル構成
+
+現在、以下のストアドプロシージャが実装されています：
+
+- `teiatsu/stores/eso_t_c0011_keiki.sql` - 計器類テーブル移行（作成日: 2026-01-14）
+- `teiatsu/stores/eso_t_c0012_kaiheiki.sql` - 低圧開閉器テーブル移行（作成日: 2026-01-14）
+- `teiatsu/stores/eso_t_c0013_cable.sql` - 低圧ケーブル管理テーブル移行（作成日: 2026-01-14）
+- `teiatsu/stores/eso_t_c0014_bundenban.sql` - 分電盤テーブル移行（作成日: 2025-01-15）
+- `teiatsu/stores/eso_t_c0015_keidenki.sql` - 計電器テーブル移行（作成日: 2025-01-15）
+
+### 注意事項
+
+- **移行元テーブルの確認**: 実行前に移行元テーブルが存在することを確認してください
+- **バックアップ**: 移行実行前に必ずバックアップを取得してください
+- **トランザクション**: 各レコードの移行は個別のトランザクションで処理されます
+- **エラーハンドリング**: エラーが発生したレコードはスキップされ、`migrate_log` に記録されます
+- **パフォーマンス**: 大量データの移行には時間がかかる場合があります
+
+### ファイルパスの例
+
+- `teiatsu/stores/eso_t_c0011_keiki.sql`
+- `teiatsu/stores/eso_t_c0014_bundenban.sql`
+- `teiatsu/stores/eso_t_c0015_keidenki.sql`
+
+---
+
 ## テーブルグループ一覧
 
 ### 📦 teiatsu（低圧関連）
@@ -649,7 +762,7 @@ YYYY-MM-DD_description.sql
 ## ファイル構造の原則
 
 - **テーブルグループごとに整理** - 関連するテーブルは同じグループフォルダに配置
-- **各グループ内で3つのサブフォルダを使用** - `migrations/`, `queries/`, `scripts/`
+- **各グループ内でサブフォルダを使用** - `migrations/`, `queries/`, `scripts/`, `stores/`（`teiatsu`のみ）
 - **命名規則で整理** - ファイル名の日付と操作タイプで管理
 - **日付順で実行** - マイグレーションファイルは日付順に実行
 - **グループ内で完結** - 各テーブルグループのファイルは、そのグループのフォルダ内に配置
@@ -686,6 +799,13 @@ YYYY-MM-DD_description.sql
 
 ## 更新履歴
 
+- 2025-01-15: `teiatsu/stores/` フォルダに2つのストアドプロシージャを追加
+  - `eso_t_c0014_bundenban.sql`（分電盤テーブル移行）
+  - `eso_t_c0015_keidenki.sql`（計電器テーブル移行）
+- 2026-01-14: `teiatsu/stores/` フォルダを追加（データ移行ストアドプロシージャ）
+  - `eso_t_c0011_keiki.sql`（計器類テーブル移行）
+  - `eso_t_c0012_kaiheiki.sql`（低圧開閉器テーブル移行）
+  - `eso_t_c0013_cable.sql`（低圧ケーブル管理テーブル移行）
 - 2026-01-09: `masuta`フォルダに4つの新規テーブルを追加
   - `eso_m_c0012_tekkyo`（撤去状態マスタテーブル）
   - `eso_m_c0014_seizosha`（製造者マスタテーブル）
