@@ -430,6 +430,9 @@ ORDER BY txn_timestamp DESC;
 - `ESI_T_K103_CT_CABLE` → `eso_t_c0013_cable`
 - `ESI_T_K104_CT_BUNDENBAN` → `eso_t_c0014_bundenban`
 - `ESI_T_K105_CT_KEIDENKI` → `eso_t_c0015_keidenki`
+- `ESI_T_K106_CT_CT` → `eso_t_c0016_ct`
+- `ESI_T_K107_CT_FUSE` → `eso_t_c0017_fuse`
+- `ESI_T_K108_CT_KANSEN` → `eso_t_c0018_kansen`
 
 ### ファイル構成
 
@@ -440,6 +443,9 @@ ORDER BY txn_timestamp DESC;
 - `teiatsu/stores/eso_t_c0013_cable.sql` - 低圧ケーブル管理テーブル移行（作成日: 2026-01-14）
 - `teiatsu/stores/eso_t_c0014_bundenban.sql` - 分電盤テーブル移行（作成日: 2025-01-15）
 - `teiatsu/stores/eso_t_c0015_keidenki.sql` - 計電器テーブル移行（作成日: 2025-01-15）
+- `teiatsu/stores/eso_t_c0016_ct.sql` - 低圧変流器テーブル移行（作成日: 2025-01-06）
+- `teiatsu/stores/eso_t_c0017_fuse.sql` - 低圧ヒューズテーブル移行（作成日: 2025-01-06）
+- `teiatsu/stores/eso_t_c0018_kansen.sql` - 幹線テーブル移行（作成日: 2025-01-06）
 
 ### 注意事項
 
@@ -454,6 +460,9 @@ ORDER BY txn_timestamp DESC;
 - `teiatsu/stores/eso_t_c0011_keiki.sql`
 - `teiatsu/stores/eso_t_c0014_bundenban.sql`
 - `teiatsu/stores/eso_t_c0015_keidenki.sql`
+- `teiatsu/stores/eso_t_c0016_ct.sql`
+- `teiatsu/stores/eso_t_c0017_fuse.sql`
+- `teiatsu/stores/eso_t_c0018_kansen.sql`
 
 ---
 
@@ -802,6 +811,10 @@ YYYY-MM-DD_description.sql
 - 2025-01-15: `teiatsu/stores/` フォルダに2つのストアドプロシージャを追加
   - `eso_t_c0014_bundenban.sql`（分電盤テーブル移行）
   - `eso_t_c0015_keidenki.sql`（計電器テーブル移行）
+- 2025-01-06: `teiatsu/stores/` フォルダに3つのストアドプロシージャを追加
+  - `eso_t_c0016_ct.sql`（低圧変流器テーブル移行）
+  - `eso_t_c0017_fuse.sql`（低圧ヒューズテーブル移行）
+  - `eso_t_c0018_kansen.sql`（幹線テーブル移行）
 - 2026-01-14: `teiatsu/stores/` フォルダを追加（データ移行ストアドプロシージャ）
   - `eso_t_c0011_keiki.sql`（計器類テーブル移行）
   - `eso_t_c0012_kaiheiki.sql`（低圧開閉器テーブル移行）
